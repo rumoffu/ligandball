@@ -1,0 +1,5 @@
+# basic ignores
+bin
+models
+.metadata
+
