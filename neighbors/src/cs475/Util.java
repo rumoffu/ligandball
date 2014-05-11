@@ -66,7 +66,7 @@ public class Util{
 	 * @param instances the list of data Instances
 	 * @return maxkey the maximum feature id over the given list of instances
 	 */
-	protected static int getMaxFeatureKey(List<Instance> instances){
+	public static int getMaxFeatureKey(List<Instance> instances){
 		int maxkey = 0;
 		int tempkey = 0;
 		for (Instance e: instances){
@@ -93,7 +93,7 @@ public class Util{
 		return dotsum;
 	}
 	
-	protected static Double[] vectorAdd(Double[] toadd, Double[] added){
+	public static Double[] vectorAdd(Double[] toadd, Double[] added){
 		Double[] sum = new Double[toadd.length];
 		for(int i = 0; i < toadd.length; i++){
 			sum[i] = toadd[i] + added[i];
@@ -115,7 +115,7 @@ public class Util{
 	 * @param b the second given vector as a Double[]
 	 * @return the Euclidean distance (squareroot of the sum of differences)
 	 */
-	protected static double euclideanDistance(Double[] a, Double[] b){
+	public static double euclideanDistance(Double[] a, Double[] b){
 		double sum = 0.0;
 		double diff = 0.0;
 		for(int i = 0; i < a.length; i++){
