@@ -75,36 +75,46 @@ public class Classify {
 		// TODO Evaluate the model
 		//AccuracyEvaluator evaluator = new AccuracyEvaluator();
 		double accuracy;
+		Predictor returnPredictor;
 		if(algorithm.equalsIgnoreCase("even_odd")){
 			EvenOddClassifier predictor = new EvenOddClassifier();
 			predictor.train(instances);
 			//System.out.printf("Testing %s Accuracy\n", predictor);
 			//accuracy = evaluator.evaluateAccuracy(instances, predictor);
-			return (Predictor) predictor;
+//			return (Predictor) predictor;
+			returnPredictor = (Predictor) predictor;
 		}
 		else if(algorithm.equalsIgnoreCase("even_odd")){
 			EvenOddClassifier predictor = new EvenOddClassifier();
 			predictor.train(instances);
 			//System.out.printf("Testing %s Accuracy\n", predictor);
 			//accuracy = evaluator.evaluateAccuracy(instances, predictor);
-			return (Predictor) predictor;
+//			return (Predictor) predictor;
+			returnPredictor = (Predictor) predictor;
 		}
-		return null;
+		else {
+			returnPredictor = null;
+		}
+		AccuracyEvaluator evaluator = new AccuracyEvaluator();
+		System.out.printf("Testing %s Accuracy\n", returnPredictor);
+		accuracy = evaluator.evaluateAccuracy(instances, returnPredictor);
+		
+		return returnPredictor;
 	}
 
 	private static void evaluateAndSavePredictions(Predictor predictor,
 			List<Instance> instances, String predictions_file) throws IOException {
 		PredictionsWriter writer = new PredictionsWriter(predictions_file);
 		// TODO Evaluate the model if labels are available. 
-//		double accuracy;
-//		if(instances.get(0).getLabel() != null){
-//			AccuracyEvaluator evaluator = new AccuracyEvaluator();
-//			System.out.printf("Testing %s Accuracy\n", predictor);
-//			accuracy = evaluator.evaluateAccuracy(instances, predictor);
-//		}
-//		else{ //courtesy information message
-//			System.out.println("Test data therefore accuracy cannot be calculated.");
-//		}
+		double accuracy;
+		if(instances.get(0).getLabel() != null){
+			AccuracyEvaluator evaluator = new AccuracyEvaluator();
+			System.out.printf("Testing %s Accuracy\n", predictor);
+			accuracy = evaluator.evaluateAccuracy(instances, predictor);
+		}
+		else{ //courtesy information message
+			System.out.println("Test data therefore accuracy cannot be calculated.");
+		}
 		
 		for (Instance instance : instances) {
 			Label label = predictor.predict(instance);
