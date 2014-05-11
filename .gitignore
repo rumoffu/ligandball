@@ -2,4 +2,5 @@
 bin
 models
 .metadata
+*.swp
 
