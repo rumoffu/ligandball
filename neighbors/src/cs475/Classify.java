@@ -112,7 +112,7 @@ public class Classify {
 		
 		AccuracyEvaluator evaluator = new AccuracyEvaluator();
 		System.out.printf("Testing %s Accuracy\n", returnPredictor);
-//		accuracy = evaluator.evaluateAccuracyOnly(instances, returnPredictor);
+//		accuracy = evaluator.evaluateAccuracy(instances, returnPredictor);
 
 		accuracy = evaluator.evaluatePR(instances, returnPredictor);
 		
@@ -127,7 +127,9 @@ public class Classify {
 		if(instances.get(0).getLabel() != null){
 			AccuracyEvaluator evaluator = new AccuracyEvaluator();
 			System.out.printf("Testing %s Accuracy\n", predictor);
-			accuracy = evaluator.evaluateAccuracy(instances, predictor, writer);
+//			accuracy = evaluator.evaluateWriteAccuracy(instances, predictor, writer);
+			accuracy = evaluator.evaluateWritePR(instances, predictor, writer);
+			
 		}
 		else{ //courtesy information message
 			System.out.println("Test data therefore accuracy cannot be calculated.");

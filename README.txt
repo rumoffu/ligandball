@@ -41,6 +41,11 @@ Testing Basic Nearest Neighbor with epsilon 35.0 Accuracy
 Number correct: 140/142 (98.59%)
 Total execution time (ms): 8631
 
+Testing Basic Nearest Neighbor with epsilon 39.0 Accuracy
+Number correct: 140/142 (98.59%)
+Precision: 0/0 (NaN%)
+Recall: 0/2 (0.00%)
+Total execution time (ms): 4422
 
 
 Train---
