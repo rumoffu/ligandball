@@ -170,7 +170,8 @@ public class SphereNearestNeighborPredictor extends Predictor{
 				this.infogains[i] = 0.0;
 			}
 			else {
-				this.infogains[i] = -1*pyixj0*Math.log(pyixj0 / pxj) + -1* pyixj1*Math.log(pyixj1 / pxj);
+				int factor = 1;
+				this.infogains[i] = factor*pyixj0*Math.log(pyixj0 / pxj) + factor* pyixj1*Math.log(pyixj1 / pxj);
 //			this.infogains[i] = -1*pyixj0*Math.log(pyixj0 / pxj) + -1* pyixj1*Math.log(pyixj1 / pxj);
 			}
 			
