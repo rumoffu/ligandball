@@ -47,6 +47,12 @@ Precision: 0/0 (NaN%)
 Recall: 0/2 (0.00%)
 Total execution time (ms): 4422
 
+Testing Basic Nearest Neighbor with IG with epsilon 39.0 Accuracy
+Number correct: 140/142 (98.59%)
+Precision: 0/0 (NaN%)
+Recall: 0/2 (0.00%)
+Total execution time (ms): 5050
+
 
 Train---
 
