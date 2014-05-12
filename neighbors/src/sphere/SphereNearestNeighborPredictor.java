@@ -66,15 +66,20 @@ public class SphereNearestNeighborPredictor extends Predictor{
 
 		selectFeatures(instances);
 		double[] xi = new double[this.num_features_to_select];
+
+//		System.out.println("num features: " + this.num_features_to_select);
 //		this.number_of_features = Util.getMaxFeatureKey(instances);
 		
 		this.labels = new int[instances.size()];
 //		for(Instance e : instances){
 		for(int i = 0; i < instances.size(); i++) {
-			xi = instances.get(i).getFeatureVector().getAlld(this.num_features_to_select);
-//			for (int j = 0; j < this.num_features_to_select; j++){
-//				xi[j] = instances.get(i).getFeatureVector().get(this.bestgains[j]);
-//			}
+//			xi = instances.get(i).getFeatureVector().getAlld(this.num_features_to_select);
+			double[] all = new double[this.num_features_to_select];
+			for (int j = 0; j < this.num_features_to_select; j++) {
+				all[j] = instances.get(i).getFeatureVector().get(this.bestgains[j]);
+//				all[j] = instances.get(i).getFeatureVector().get(j+1);
+			}
+			xi = all;
 			pts.add(xi);
 			this.labels[i] = Integer.parseInt(instances.get(i).getLabel().toString());
 		}
@@ -85,11 +90,14 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		double[] xi = new double[this.num_features_to_select];
 		int ballcount = 0;
 		int positivecount = 0;
-		for(int k = 0; k < this.pts.size(); k++) { //for each training point
-			xi = instance.getFeatureVector().getAlld(this.num_features_to_select);
-//			for (int j = 0; j < this.num_features_to_select; j++){
-//				xi[j] = instance.getFeatureVector().get(this.bestgains[j]);
-//			}
+		for(int k = 0; k < this.pts.size(); k++) { //for each training point 
+//			xi = instance.getFeatureVector().getAlld(this.num_features_to_select);
+			double[] all = new double[this.num_features_to_select];
+			for (int j = 0; j < this.num_features_to_select; j++) {
+				all[j] = instance.getFeatureVector().get(this.bestgains[j]);
+//				all[j] = instances.get(i).getFeatureVector().get(j+1);
+			}
+			xi = all;
 			dist = Util.euclideanDistance(xi, pts.get(k));
 //			System.out.println(dist);
 			if(dist < this.eps){ // within epsilon ball radius
@@ -189,7 +197,7 @@ public class SphereNearestNeighborPredictor extends Predictor{
 			this.infogains[bestid] = Double.NEGATIVE_INFINITY;
 //			System.out.println("bestid: "+bestgains[j]+" bestvalues: " + bestvalues[j]); //verified speech.train
 		}
-		Arrays.sort(bestgains); // to track weight with feature number ordering
+		Arrays.sort(bestgains); // to track weight with feature number ordering //KTW
 //		for(int j = 0; j < num_features_to_select; j++) System.out.println("bestid: "+bestgains[j]+" bestvalues: " + bestvalues[j]);
 	}
 	

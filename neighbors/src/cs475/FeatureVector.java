@@ -20,14 +20,7 @@ public class FeatureVector implements Serializable {
 		this.savedStuff.put(index, value);
 	}
 	
-	public double get(int index) {
-		// TODO Auto-generated method stub
-		if(this.savedStuff.containsKey(index))
-			return this.savedStuff.get(index);
-		else
-			return 0;
 
-	}
 	
 	public Iterator getIterator(){
 		return savedStuff.entrySet().iterator();
@@ -54,6 +47,14 @@ public class FeatureVector implements Serializable {
 
 	}
 	
+	public double get(int index) {
+		// TODO Auto-generated method stub
+		if(this.savedStuff.containsKey(index))
+			return this.savedStuff.get(index);
+		else
+			return 0.0;
+
+	}
 	/**
 	 * Returns all the feature vector data as a double[]
 	 * @param numFeatures the number of features to get the data for
