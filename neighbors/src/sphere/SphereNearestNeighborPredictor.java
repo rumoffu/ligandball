@@ -49,6 +49,10 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		
 	}
 	
+	public String toString() {
+		return "Basic Nearest Neighbor with epsilon " + String.valueOf(this.eps);
+	}
+	
 	public void train(List<Instance> instances) {
 		double[] xi;
 		this.number_of_features = Util.getMaxFeatureKey(instances);
@@ -69,6 +73,7 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		for(int k = 0; k < this.pts.size(); k++) { //for each training point
 			xi = instance.getFeatureVector().getAlld(this.number_of_features);
 			dist = Util.euclideanDistance(xi, pts.get(k));
+//			System.out.println(dist);
 			if(dist < this.eps){ // within epsilon ball radius
 				ballcount++;
 				positivecount += labels[k]; // add the 1's, ignore 0's

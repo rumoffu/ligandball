@@ -25,8 +25,9 @@ import org.apache.commons.cli.OptionBuilder;
 
 public class Classify {
 	static public LinkedList<Option> options = new LinkedList<Option>();
-	
+	final static long startTime = System.currentTimeMillis();
 	public static void main(String[] args) throws IOException {
+//		startTime = System.currentTimeMillis();
 		// Parse the command line.
 		String[] manditory_args = { "mode"};
 		createCommandLineOptions();
@@ -37,8 +38,11 @@ public class Classify {
 		String predictions_file = CommandLineUtilities.getOptionValue("predictions_file");
 		String algorithm = CommandLineUtilities.getOptionValue("algorithm");
 		String model_file = CommandLineUtilities.getOptionValue("model_file");
-		double eps = Double.parseDouble(CommandLineUtilities.getOptionValue("epsilon"));
 		
+		double eps = 50;
+		if (CommandLineUtilities.hasArg("epsilon")){
+			eps = Double.parseDouble(CommandLineUtilities.getOptionValue("epsilon"));
+		}
 		if (mode.equalsIgnoreCase("train")) {
 			if (data == null || algorithm == null || model_file == null) {
 				System.out.println("Train requires the following arguments: data, algorithm, model_file");
@@ -48,6 +52,8 @@ public class Classify {
 			DataReader data_reader = new DataReader(data, true);
 			List<Instance> instances = data_reader.readData();
 			data_reader.close();
+			final long dataTime = System.currentTimeMillis();
+			System.out.println("Total data time (ms): " + (dataTime - startTime) );
 			
 			// Train the model.
 			Predictor predictor = train(instances, algorithm, eps);
@@ -70,6 +76,8 @@ public class Classify {
 		} else {
 			System.out.println("Requires mode argument.");
 		}
+		final long endTime = System.currentTimeMillis();
+		System.out.println("Total execution time (ms): " + (endTime - startTime) );
 	}
 	
 
@@ -87,7 +95,7 @@ public class Classify {
 //			return (Predictor) predictor;
 			returnPredictor = (Predictor) predictor;
 		}
-		else if(algorithm.equalsIgnoreCase("even_odd")){
+		else if(algorithm.equalsIgnoreCase("ball")){
 			SphereNearestNeighborPredictor predictor = new SphereNearestNeighborPredictor(eps);
 			predictor.train(instances);
 			//System.out.printf("Testing %s Accuracy\n", predictor);
@@ -98,6 +106,10 @@ public class Classify {
 		else {
 			returnPredictor = null;
 		}
+		
+		final long trainTime = System.currentTimeMillis();
+		System.out.println("Total train time (ms): " + (trainTime - startTime) );
+		
 		AccuracyEvaluator evaluator = new AccuracyEvaluator();
 		System.out.printf("Testing %s Accuracy\n", returnPredictor);
 		accuracy = evaluator.evaluateAccuracy(instances, returnPredictor);

@@ -26,3 +26,35 @@ EvenOddEasyTest
 
 EvenOddEasyTrain
 -mode train -algorithm even_odd -model_file models/easy.even_odd.model -data data/easy.train
+
+BallLigTrain
+-mode train -algorithm ball -model_file models/lig.ball.model -data data/ligand.train
+
+Results:
+Testing Basic Nearest Neighbor with epsilon 500.0 Accuracy
+Number correct: 561/568 (98.77%)
+Total execution time (ms): 16939
+
+Total data time (ms): 917
+Total train time (ms): 962
+Testing Basic Nearest Neighbor with epsilon 40.0 Accuracy
+Number correct: 561/568 (98.77%)
+Total execution time (ms): 17481
+
+Total data time (ms): 887
+Total train time (ms): 932
+Testing Basic Nearest Neighbor with epsilon 39.0 Accuracy
+Number correct: 566/568 (99.65%)
+Total execution time (ms): 17501
+
+Total data time (ms): 904
+Total train time (ms): 949
+Testing Basic Nearest Neighbor with epsilon 38.0 Accuracy
+Number correct: 567/568 (99.82%)
+Total execution time (ms): 17203
+
+Total data time (ms): 901
+Total train time (ms): 948
+Testing Basic Nearest Neighbor with epsilon 37.0 Accuracy
+Number correct: 568/568 (100.00%)
+Total execution time (ms): 17296
