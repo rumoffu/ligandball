@@ -43,6 +43,10 @@ public class Classify {
 		if (CommandLineUtilities.hasArg("epsilon")){
 			eps = Double.parseDouble(CommandLineUtilities.getOptionValue("epsilon"));
 		}
+		final int UNINITIALIZED = -1;
+		int num_features = UNINITIALIZED;
+		if (CommandLineUtilities.hasArg("num_features_to_select"))
+			num_features = CommandLineUtilities.getOptionValueAsInt("num_features_to_select");
 		if (mode.equalsIgnoreCase("train")) {
 			if (data == null || algorithm == null || model_file == null) {
 				System.out.println("Train requires the following arguments: data, algorithm, model_file");
@@ -56,7 +60,7 @@ public class Classify {
 			System.out.println("Total data time (ms): " + (dataTime - startTime) );
 			
 			// Train the model.
-			Predictor predictor = train(instances, algorithm, eps);
+			Predictor predictor = train(instances, algorithm, eps, num_features);
 			saveObject(predictor, model_file);		
 			
 		} else if (mode.equalsIgnoreCase("test")) {
@@ -81,7 +85,7 @@ public class Classify {
 	}
 	
 
-	private static Predictor train(List<Instance> instances, String algorithm, double eps) {
+	private static Predictor train(List<Instance> instances, String algorithm, double eps, int num_features) {
 		// TODO Train the model using "algorithm" on "data"
 		// TODO Evaluate the model
 		//AccuracyEvaluator evaluator = new AccuracyEvaluator();
@@ -96,7 +100,7 @@ public class Classify {
 			returnPredictor = (Predictor) predictor;
 		}
 		else if(algorithm.equalsIgnoreCase("ball")){
-			SphereNearestNeighborPredictor predictor = new SphereNearestNeighborPredictor(eps);
+			SphereNearestNeighborPredictor predictor = new SphereNearestNeighborPredictor(eps, num_features);
 			predictor.train(instances);
 			//System.out.printf("Testing %s Accuracy\n", predictor);
 			//accuracy = evaluator.evaluateAccuracy(instances, predictor);
@@ -192,6 +196,7 @@ public class Classify {
 		registerOption("algorithm", "String", true, "The name of the algorithm for training.");
 		registerOption("model_file", "String", true, "The name of the model file to create/load.");
 		registerOption("epsilon", "double", true, "The value of epsilon for epsilon nearest neighbors.");
+		registerOption("num_features_to_select", "int", true, "The number of features to select.");
 		// Other options will be added here.
 	}
 }

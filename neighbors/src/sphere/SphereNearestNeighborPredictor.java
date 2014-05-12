@@ -7,6 +7,7 @@
  */
 package sphere;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,12 +21,18 @@ import cs475.Util;
 public class SphereNearestNeighborPredictor extends Predictor{
 	private double eps; // default epsilon value
 	
-	private int number_of_features;
+//	private int number_of_features;
 //	private int num_clusters = 1;
 //	private int clustering_training_iterations;
 //	private ArrayList<ArrayList<Integer>> rnk = new ArrayList<ArrayList<Integer>>(); //track which instance's are in a cluster by id
 	private ArrayList<double[]> pts = new ArrayList<double[]>(); //track training pts
 	private int[] labels; // track training point labels
+	
+	private final int UNINITIALIZED = -1;
+	private int num_features_to_select = UNINITIALIZED;
+	private Double[] infogains;
+	private Double[] weights;
+	private int[] bestgains;
 	
 	/**
 	 * @param args
@@ -43,23 +50,31 @@ public class SphereNearestNeighborPredictor extends Predictor{
 
 	}
 
-	public SphereNearestNeighborPredictor(double eps){
+	public SphereNearestNeighborPredictor(double eps, int input_num_features) {
 		this.eps = eps;
+
+		this.num_features_to_select = input_num_features;
 //		this.clustering_training_iterations = clustering_training_iterations;
 		
 	}
 	
 	public String toString() {
-		return "Basic Nearest Neighbor with epsilon " + String.valueOf(this.eps);
+		return "Basic Nearest Neighbor with IG with epsilon " + String.valueOf(this.eps);
 	}
 	
 	public void train(List<Instance> instances) {
-		double[] xi;
-		this.number_of_features = Util.getMaxFeatureKey(instances);
+
+		selectFeatures(instances);
+		double[] xi = new double[this.num_features_to_select];
+//		this.number_of_features = Util.getMaxFeatureKey(instances);
+		
 		this.labels = new int[instances.size()];
 //		for(Instance e : instances){
 		for(int i = 0; i < instances.size(); i++) {
-			xi = instances.get(i).getFeatureVector().getAlld(this.number_of_features);
+			xi = instances.get(i).getFeatureVector().getAlld(this.num_features_to_select);
+//			for (int j = 0; j < this.num_features_to_select; j++){
+//				xi[j] = instances.get(i).getFeatureVector().get(this.bestgains[j]);
+//			}
 			pts.add(xi);
 			this.labels[i] = Integer.parseInt(instances.get(i).getLabel().toString());
 		}
@@ -67,11 +82,14 @@ public class SphereNearestNeighborPredictor extends Predictor{
 	
 	public Label predict(Instance instance) {
 		double dist;
-		double[] xi;
+		double[] xi = new double[this.num_features_to_select];
 		int ballcount = 0;
 		int positivecount = 0;
 		for(int k = 0; k < this.pts.size(); k++) { //for each training point
-			xi = instance.getFeatureVector().getAlld(this.number_of_features);
+			xi = instance.getFeatureVector().getAlld(this.num_features_to_select);
+//			for (int j = 0; j < this.num_features_to_select; j++){
+//				xi[j] = instance.getFeatureVector().get(this.bestgains[j]);
+//			}
 			dist = Util.euclideanDistance(xi, pts.get(k));
 //			System.out.println(dist);
 			if(dist < this.eps){ // within epsilon ball radius
@@ -86,6 +104,95 @@ public class SphereNearestNeighborPredictor extends Predictor{
 			return new ClassificationLabel(0);
 		}
 	}
+	
+	private void selectFeatures(List<Instance> instances){
+
+		Double thresh_sum;
+		Double threshold;
+		double px, pyx0, pyx1;
+		double pxj, pyixj0, pyixj1;
+		
+		// if uninitialized, just use all features
+		int maxkey = Util.getMaxFeatureKey(instances);
+		if(num_features_to_select == UNINITIALIZED){
+			num_features_to_select = maxkey;
+		}
+		
+		// ???? remove this?
+		if(maxkey < num_features_to_select){ //KTW was less than..?
+			maxkey = num_features_to_select;
+		}
+		
+		//initialize IG to 0 for each 
+		this.infogains = new Double[maxkey];
+		this.weights = new Double[num_features_to_select];
+		for(int i = 0; i < maxkey; i++){
+			this.infogains[i] = null;
+		}
+		
+		for(int i = 0; i < maxkey; i++){ //for each feature	
+			// set the threshold to the mean of all the instances
+			thresh_sum = 0.0;
+			px = 0;
+			pyx0 = 0;
+			pyx1 = 0;
+			for(Instance inst : instances){
+				thresh_sum += inst.getFeatureVector().get(i+1);
+			}
+			threshold = thresh_sum / instances.size();
+			
+			//count 0's and 1's above threshold
+			for(Instance inst: instances){
+				if(inst.getFeatureVector().get(i+1) <= threshold){
+					px++;
+					if(inst.getLabel().toString().equals("0")){
+						pyx0++;
+					}
+					else if(inst.getLabel().toString().equals("1")){
+						pyx1++;
+					}
+				}
+			}
+			
+			// calculate IG for this feature
+			pxj = px / instances.size();
+			pyixj0 = pyx0 / instances.size();
+			pyixj1 = pyx1 / instances.size();//log of 0 is NaN - might be a problem when lacking train data
+			if (pyixj0 == 0 || pyixj1 == 0) {
+				this.infogains[i] = 0.0;
+			}
+			else {
+				this.infogains[i] = -1*pyixj0*Math.log(pyixj0 / pxj) + -1* pyixj1*Math.log(pyixj1 / pxj);
+//			this.infogains[i] = -1*pyixj0*Math.log(pyixj0 / pxj) + -1* pyixj1*Math.log(pyixj1 / pxj);
+			}
+			
+//			double temp = this.infogains[i]; 
+//			System.out.printf("%s %s\n", i, temp);
+		}
+//		for(int k = 0; k < infogains.length; k++) System.out.printf("infogains %s %s\n", k, infogains[k]);
+
+		// select the features with best IG and save their id
+		this.bestgains = new int[this.num_features_to_select];
+		double[] bestvalues = new double[this.num_features_to_select];
+		for(int j = 0; j < num_features_to_select; j++){
+			this.weights[j] = 0.0;
+			double bestig = Double.NEGATIVE_INFINITY;
+			int bestid = 0;
+			for(int i = 0; i < maxkey; i++){ //KTW should be maxkey? was num_features_to_select
+				if(bestig < this.infogains[i]){ // was <=, but it seems to skip some
+					bestig = this.infogains[i];
+					bestid = i;
+				}
+			}
+			this.bestgains[j] = bestid+1; //features are 1 based, not 0 based
+			bestvalues[j] = bestig; // save the best value for checking
+			this.infogains[bestid] = Double.NEGATIVE_INFINITY;
+//			System.out.println("bestid: "+bestgains[j]+" bestvalues: " + bestvalues[j]); //verified speech.train
+		}
+		Arrays.sort(bestgains); // to track weight with feature number ordering
+//		for(int j = 0; j < num_features_to_select; j++) System.out.println("bestid: "+bestgains[j]+" bestvalues: " + bestvalues[j]);
+	}
+	
 //	@Override
 //	public void train(List<Instance> instances) {
 //		// Initialize prototype vector to the mean of all instances

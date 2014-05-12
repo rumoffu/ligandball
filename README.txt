@@ -50,6 +50,16 @@ Total execution time (ms): 4422
 
 Train---
 
+Total data time (ms): 894
+Total train time (ms): 1131
+Testing Basic Nearest Neighbor with epsilon 39.0 Accuracy
+Number correct: 560/568 (98.59%)
+Precision: 0/0 (NaN%)
+Recall: 0/8 (0.00%)
+Total execution time (ms): 21954
+
+---- pre IG
+
 Total data time (ms): 1018
 Total train time (ms): 1063
 Testing Basic Nearest Neighbor with epsilon 39.0 Accuracy
