@@ -34,6 +34,9 @@ public class SphereNearestNeighborPredictor extends Predictor{
 	private Double[] weights;
 	private int[] bestgains;
 	
+	private double distsum;
+	private int numpred;
+	
 	/**
 	 * @param args
 	 */
@@ -54,12 +57,15 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		this.eps = eps;
 
 		this.num_features_to_select = input_num_features;
+		this.distsum = 0;
+		this.numpred = 0;
 //		this.clustering_training_iterations = clustering_training_iterations;
 		
 	}
 	
 	public String toString() {
-		return "Basic Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps);
+		return "Basic Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps)
+				+ " average distance : " + String.valueOf(this.distsum / this.numpred);
 	}
 	
 	public void train(List<Instance> instances) {
@@ -100,6 +106,8 @@ public class SphereNearestNeighborPredictor extends Predictor{
 			xi = all;
 			dist = Util.euclideanDistance(xi, pts.get(k));
 //			System.out.println(dist);
+			this.distsum += dist;
+			this.numpred++;
 			if(dist < this.eps){ // within epsilon ball radius
 				ballcount++;
 				positivecount += labels[k]; // add the 1's, ignore 0's

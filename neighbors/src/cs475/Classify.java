@@ -57,11 +57,13 @@ public class Classify {
 			List<Instance> instances = data_reader.readData();
 			data_reader.close();
 			final long dataTime = System.currentTimeMillis();
-			System.out.println("Total data time (ms): " + (dataTime - startTime) );
+//			System.out.println("Total data time (ms): " + (dataTime - startTime) );
 			
 			// Train the model.
 			Predictor predictor = train(instances, algorithm, eps, num_features);
 			saveObject(predictor, model_file);		
+
+			System.out.printf("Tested %s Accuracy\n", predictor);
 			
 		} else if (mode.equalsIgnoreCase("test")) {
 			if (data == null || predictions_file == null || model_file == null) {
@@ -112,7 +114,7 @@ public class Classify {
 		}
 		
 		final long trainTime = System.currentTimeMillis();
-		System.out.println("Total train time (ms): " + (trainTime - startTime) );
+//		System.out.println("Total train time (ms): " + (trainTime - startTime) );
 		
 		AccuracyEvaluator evaluator = new AccuracyEvaluator();
 		System.out.printf("Testing %s Accuracy\n", returnPredictor);
