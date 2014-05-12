@@ -59,7 +59,7 @@ public class SphereNearestNeighborPredictor extends Predictor{
 	}
 	
 	public String toString() {
-		return "Basic Nearest Neighbor with IG with epsilon " + String.valueOf(this.eps);
+		return "Basic Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps);
 	}
 	
 	public void train(List<Instance> instances) {

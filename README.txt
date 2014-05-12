@@ -53,8 +53,22 @@ Precision: 0/0 (NaN%)
 Recall: 0/2 (0.00%)
 Total execution time (ms): 5050
 
+Testing Basic Nearest Neighbor with IG numfeatures: 50 with epsilon 39.0 Accuracy
+Number correct: 140/142 (98.59%)
+Precision: 0/0 (NaN%)
+Recall: 0/2 (0.00%)
+Total execution time (ms): 679
+
 
 Train---
+
+Total data time (ms): 888
+Total train time (ms): 1076
+Testing Basic Nearest Neighbor with IG numfeatures: 50 with epsilon 39.0 Accuracy
+Number correct: 560/568 (98.59%)
+Precision: 0/0 (NaN%)
+Recall: 0/8 (0.00%)
+Total execution time (ms): 2306
 
 Total data time (ms): 893
 Total train time (ms): 1131
