@@ -16,7 +16,7 @@ Example output: label followed by 500 features as doubles
 
 '''
 def compilefred(fredcsv):
-  ligand = 'frame'
+  ligand = 'ball'
   lig = open(ligand, 'wb')
   sep = ' '
 
@@ -35,7 +35,7 @@ def compilefred(fredcsv):
 
 
 def main():
-  csv = 'framedata.csv'
+  csv = 'balldata.csv'
   fredcsv = open(csv, 'r')
   compilefred(fredcsv)
   
