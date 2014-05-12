@@ -7,7 +7,9 @@
  */
 package cs475;
 
+import sphere.SphereNearestNeighborPredictor;
 import java.io.BufferedInputStream;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,6 +37,7 @@ public class Classify {
 		String predictions_file = CommandLineUtilities.getOptionValue("predictions_file");
 		String algorithm = CommandLineUtilities.getOptionValue("algorithm");
 		String model_file = CommandLineUtilities.getOptionValue("model_file");
+		double eps = Double.parseDouble(CommandLineUtilities.getOptionValue("epsilon"));
 		
 		if (mode.equalsIgnoreCase("train")) {
 			if (data == null || algorithm == null || model_file == null) {
@@ -47,7 +50,7 @@ public class Classify {
 			data_reader.close();
 			
 			// Train the model.
-			Predictor predictor = train(instances, algorithm);
+			Predictor predictor = train(instances, algorithm, eps);
 			saveObject(predictor, model_file);		
 			
 		} else if (mode.equalsIgnoreCase("test")) {
@@ -70,7 +73,7 @@ public class Classify {
 	}
 	
 
-	private static Predictor train(List<Instance> instances, String algorithm) {
+	private static Predictor train(List<Instance> instances, String algorithm, double eps) {
 		// TODO Train the model using "algorithm" on "data"
 		// TODO Evaluate the model
 		//AccuracyEvaluator evaluator = new AccuracyEvaluator();
@@ -85,7 +88,7 @@ public class Classify {
 			returnPredictor = (Predictor) predictor;
 		}
 		else if(algorithm.equalsIgnoreCase("even_odd")){
-			EvenOddClassifier predictor = new EvenOddClassifier();
+			SphereNearestNeighborPredictor predictor = new SphereNearestNeighborPredictor(eps);
 			predictor.train(instances);
 			//System.out.printf("Testing %s Accuracy\n", predictor);
 			//accuracy = evaluator.evaluateAccuracy(instances, predictor);
@@ -173,7 +176,7 @@ public class Classify {
 		registerOption("predictions_file", "String", true, "The predictions file to create.");
 		registerOption("algorithm", "String", true, "The name of the algorithm for training.");
 		registerOption("model_file", "String", true, "The name of the model file to create/load.");
-		
+		registerOption("epsilon", "double", true, "The value of epsilon for epsilon nearest neighbors.");
 		// Other options will be added here.
 	}
 }

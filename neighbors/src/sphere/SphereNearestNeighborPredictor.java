@@ -17,9 +17,10 @@ import cs475.Predictor;
 import cs475.Util;
 
 public class SphereNearestNeighborPredictor extends Predictor{
-
+	private double eps; // default epsilon value
+	
 	private int number_of_features;
-	private double cluster_lambda;
+
 	private int num_clusters = 1;
 	private int clustering_training_iterations;
 	private ArrayList<ArrayList<Integer>> rnk = new ArrayList<ArrayList<Integer>>(); //track which instance's are in a cluster by id
@@ -42,10 +43,10 @@ public class SphereNearestNeighborPredictor extends Predictor{
 
 	}
 
-	public SphereNearestNeighborPredictor(double cluster_lambda, int clustering_training_iterations){
+	public SphereNearestNeighborPredictor(double eps){
 
-		this.cluster_lambda = cluster_lambda;
-		this.clustering_training_iterations = clustering_training_iterations;
+		this.eps = eps;
+//		this.clustering_training_iterations = clustering_training_iterations;
 		
 	}
 	
@@ -70,15 +71,15 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		rnk.add(newCluster);
 		
 		// Initialize Lambda Value
-		if(this.cluster_lambda == 0.0){
-			double lambdasum = 0.0;
-			for(Instance e : instances){
-				xi = e.getFeatureVector().getAll(this.number_of_features);
-				lambdasum += Util.euclideanDistance(xi, mewk.get(0));
-			}
-			this.cluster_lambda = 1.0/instances.size() * lambdasum;
-		}
-		System.out.println("Cluster lambda: " + this.cluster_lambda);
+//		if(this.cluster_lambda == 0.0){
+//			double lambdasum = 0.0;
+//			for(Instance e : instances){
+//				xi = e.getFeatureVector().getAll(this.number_of_features);
+//				lambdasum += Util.euclideanDistance(xi, mewk.get(0));
+//			}
+//			this.cluster_lambda = 1.0/instances.size() * lambdasum;
+//		}
+//		System.out.println("Cluster lambda: " + this.cluster_lambda);
 		
 		// Perform training iterations
 		for(int i = 0; i < this.clustering_training_iterations; i++){
@@ -108,17 +109,17 @@ public class SphereNearestNeighborPredictor extends Predictor{
 					minCluster = k;
 				}
 			}
-			if(minDist <= this.cluster_lambda){
-				// fits in a current cluster, so get the cluster's arraylist and add the instance id to it
-				
-				rnk.get(minCluster).add(j);
-			}
-			else{ //bigger than lambda so we make a new cluster and make a new mew_k
-				ArrayList<Integer> newCluster = new ArrayList<Integer>();
-				newCluster.add(j);
-				rnk.add(newCluster);
-				mewk.add(xi);
-			}
+//			if(minDist <= this.cluster_lambda){
+//				// fits in a current cluster, so get the cluster's arraylist and add the instance id to it
+//				
+//				rnk.get(minCluster).add(j);
+//			}
+//			else{ //bigger than lambda so we make a new cluster and make a new mew_k
+//				ArrayList<Integer> newCluster = new ArrayList<Integer>();
+//				newCluster.add(j);
+//				rnk.add(newCluster);
+//				mewk.add(xi);
+//			}
 		}
 		
 	}
