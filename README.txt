@@ -41,6 +41,98 @@ Ball
 
 ==============================================
 
+Positive factor:
+
+Train
+----------------------------------------
+Number correct: 520/560 (92.86%)
+Precision: 0/0 (NaN%)
+Recall: 0/40 (0.00%)
+Tested Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 100.0 average distance : 34.589146438354916 Accuracy
+Total execution time (ms): 20767
+
+Number correct: 520/560 (92.86%)
+Precision: 0/0 (NaN%)
+Recall: 0/40 (0.00%)
+Tested Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 60.0 average distance : 34.589146438354916 Accuracy
+Total execution time (ms): 20650
+
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 50.0 average distance : 34.589146438354916 Accuracy
+Total execution time (ms): 20693
+
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 45.0 average distance : 34.589146438354916 Accuracy
+Total execution time (ms): 20725
+
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 35.0 average distance : 34.589146438354916 Accuracy
+Total execution time (ms): 20641
+
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 30.0 average distance : 34.589146438354916 Accuracy
+Total execution time (ms): 20769
+
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 25.0 average distance : 34.589146438354916 Accuracy
+Total execution time (ms): 20767
+
+Dev 
+------------------------------------------
+
+Testing Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 100.0 average distance : 34.589146438354916 Accuracy
+Number correct: 130/140 (92.86%)
+Precision: 0/0 (NaN%)
+Recall: 0/10 (0.00%)
+Total execution time (ms): 4835
+
+Testing Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 60.0 average
+Number correct: 130/140 (92.86%)
+Precision: 0/0 (NaN%)
+Recall: 0/10 (0.00%)
+Total execution time (ms): 4602
+
+Testing Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 50.0 average distance : 34.589146438354916 Accuracy
+Number correct: 140/140 (100.00%)
+Precision: 10/10 (100.00%)
+Recall: 10/10 (100.00%)
+Total execution time (ms): 4834
+
+Testing Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 45.0 average distance : 34.589146438354916 Accuracy
+Number correct: 140/140 (100.00%)
+Precision: 10/10 (100.00%)
+Recall: 10/10 (100.00%)
+Total execution time (ms): 4813
+
+Testing Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 35.0 average distance : 34.589146438354916 Accuracy
+Number correct: 140/140 (100.00%)
+Precision: 10/10 (100.00%)
+Recall: 10/10 (100.00%)
+Total execution time (ms): 4766
+
+Testing Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 30.0 average distance : 34.589146438354916 Accuracy
+Number correct: 135/140 (96.43%)
+Precision: 5/5 (100.00%)
+Recall: 5/10 (50.00%)
+Total execution time (ms): 4920
+
+Testing Basic Nearest Neighbor with IG numfeatures: 500 with epsilon 25.0 average distance : 34.589146438354916 Accuracy
+Number correct: 130/140 (92.86%)
+Precision: 0/0 (NaN%)
+Recall: 0/10 (0.00%)
+Total execution time (ms): 4790
+
+
 
 negative factor:
 
