@@ -112,7 +112,9 @@ public class Classify {
 		
 		AccuracyEvaluator evaluator = new AccuracyEvaluator();
 		System.out.printf("Testing %s Accuracy\n", returnPredictor);
-		accuracy = evaluator.evaluateAccuracyOnly(instances, returnPredictor);
+//		accuracy = evaluator.evaluateAccuracyOnly(instances, returnPredictor);
+
+		accuracy = evaluator.evaluatePR(instances, returnPredictor);
 		
 		return returnPredictor;
 	}
