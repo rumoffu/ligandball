@@ -112,7 +112,7 @@ public class Classify {
 		
 		AccuracyEvaluator evaluator = new AccuracyEvaluator();
 		System.out.printf("Testing %s Accuracy\n", returnPredictor);
-		accuracy = evaluator.evaluateAccuracy(instances, returnPredictor);
+		accuracy = evaluator.evaluateAccuracyOnly(instances, returnPredictor);
 		
 		return returnPredictor;
 	}
@@ -125,15 +125,14 @@ public class Classify {
 		if(instances.get(0).getLabel() != null){
 			AccuracyEvaluator evaluator = new AccuracyEvaluator();
 			System.out.printf("Testing %s Accuracy\n", predictor);
-			accuracy = evaluator.evaluateAccuracy(instances, predictor);
+			accuracy = evaluator.evaluateAccuracy(instances, predictor, writer);
 		}
 		else{ //courtesy information message
 			System.out.println("Test data therefore accuracy cannot be calculated.");
-		}
-		
-		for (Instance instance : instances) {
-			Label label = predictor.predict(instance);
-			writer.writePrediction(label);
+			for (Instance instance : instances) {
+				Label label = predictor.predict(instance);
+				writer.writePrediction(label);
+			}
 		}
 		
 		writer.close();
