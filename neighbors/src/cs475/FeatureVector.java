@@ -55,6 +55,23 @@ public class FeatureVector implements Serializable {
 	}
 	
 	/**
+	 * Returns all the feature vector data as a double[]
+	 * @param numFeatures the number of features to get the data for
+	 * @return allFeatures a Double[] holding all the feature data
+	 */
+	public double[] getAlld(int numFeatures) {
+		double[] allFeatures = new double[numFeatures];
+		for(int i = 1; i <= numFeatures; i++){
+			if(this.savedStuff.containsKey(i))
+				allFeatures[i-1] = this.savedStuff.get(i);
+			else
+				allFeatures[i-1] = 0.0;
+		}
+		return allFeatures;
+
+	}
+	
+	/**
 	 * Returns the data of the feature vector as a Double[]
 	 * @param bestgains an integer array sorted by the best information gains
 	 * @return alldata the data within this feature vector as a Double[]

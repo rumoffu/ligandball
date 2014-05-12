@@ -126,6 +126,22 @@ public class Util{
 		return sum;
 	}
 	
+	/**
+	 * Returns the l2norm, Euclidean distance, between two given vectors (double[]'s) of the same length
+	 * @param a the first given vector as a double[]
+	 * @param b the second given vector as a double[]
+	 * @return the Euclidean distance (squareroot of the sum of differences)
+	 */
+	public static double euclideanDistance(double[] a, double[] b){
+		double sum = 0.0;
+		double diff = 0.0;
+		for(int i = 0; i < a.length; i++){
+			diff = a[i] - b[i];
+			sum += diff*diff;
+		}
+		return Math.sqrt(sum);
+//		return sum; // for homework; class used square of the squareroot
+	}
 	public static Double[] matrixmult(Double[][] bin, Double[] una){
 		Double[] res = new Double[una.length];
 		for(int row = 0; row < bin.length; row++){
