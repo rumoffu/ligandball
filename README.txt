@@ -41,6 +41,22 @@ Ball
 
 ==============================================
 
+KMeans Train
+---------------
+Cluster lambda: 24.28859812275311
+Num EM Iterations for clustering: 10
+Number of mews: 44
+Testing K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 35.0 average distance : NaN Accuracy
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 35.0 average distance : 31.478136034861638 Accuracy
+Total execution time (ms): 18799
+
+KMeans Dev
+----------------
+
+
 Positive factor:
 
 Train

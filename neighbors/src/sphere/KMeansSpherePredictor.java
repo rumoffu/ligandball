@@ -195,25 +195,35 @@ public class KMeansSpherePredictor extends Predictor{
 	}
 	
 	public Label predict(Instance instance) {
+		//find the minimum distance cluster
+		double minDist = Double.POSITIVE_INFINITY;
 		double dist;
-		double[] xi = new double[this.num_features_to_select];
+		double[] xi = instance.getFeatureVector().getAlld(this.num_features_to_select);
+		int minCluster = -1;
+		for(int k = 0; k < this.mewk.size(); k++){ //compare to each mewk
+			dist = Util.euclideanDistance(xi, mewk.get(k));
+			if(dist < minDist){ //defaults to break ties by assigning to lowest cluster number
+				minDist = dist;
+				minCluster = k;
+			}
+		}
+		
+		// for each point in minimum distance cluster, check if distance < epsilon
 		int ballcount = 0;
 		int positivecount = 0;
-		for(int k = 0; k < this.pts.size(); k++) { //for each training point 
-//			xi = instance.getFeatureVector().getAlld(this.num_features_to_select);
+		
+		for(int k : this.rnk.get(minCluster)) {
 			double[] all = new double[this.num_features_to_select];
 			for (int j = 0; j < this.num_features_to_select; j++) {
 				all[j] = instance.getFeatureVector().get(this.bestgains[j]);
-//				all[j] = instances.get(i).getFeatureVector().get(j+1);
 			}
 			xi = all;
 			dist = Util.euclideanDistance(xi, pts.get(k));
-//			System.out.println(dist);
 			this.distsum += dist;
 			this.numpred++;
-			if(dist < this.eps){ // within epsilon ball radius
+			if(dist < this.eps) {
 				ballcount++;
-				positivecount += labels[k]; // add the 1's, ignore 0's
+				positivecount += labels[k]; // add 1's, ignore 0's
 			}
 		}
 		if (positivecount > ballcount/2) { //clear positive majority
@@ -222,6 +232,7 @@ public class KMeansSpherePredictor extends Predictor{
 		else { //no majority is most likely negative
 			return new ClassificationLabel(0);
 		}
+		
 	}
 	
 	private void selectFeatures(List<Instance> instances){
