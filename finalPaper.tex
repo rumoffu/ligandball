@@ -88,9 +88,17 @@ We wrote three python scripts to do this:
 \end{enumerate}
 
 \section{Results}
-The algorithm accuracy, precision, recall, and run time in milliseconds for the K-means algorithm is shown below for when all features are used and when only the fifty with the highest information gain are used.
+The algorithm accuracy, precision, recall, and run time in milliseconds for the K-means algorithm is shown below for when all features are used and when only the fifty features with the highest information gain are used. \\
 
-\includegraphics[width=75mm]{formattedData.png}
+\includegraphics[width=75mm]{kMeansData.png}
+
+The accuracy, precision, recall, and run time in milliseconds for the $\epsilon$-sphere nearest neighbor algorithm is shown below for when all features are used. \\
+
+\includegraphics[width=75mm]{epsNNAllFeaturesData.png}
+
+The accuracy, precision, recall, and run time in milliseconds for the $\epsilon$-sphere nearest neighbor algorithm is shown below for $\epsilon=50$ for when different numbers of features are selected based on highest information gain. \\
+
+\includegraphics[width=75mm]{epsNNVaryFeaturesData.png}
 
 - what tests did we run
 
