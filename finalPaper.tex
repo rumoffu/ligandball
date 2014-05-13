@@ -60,10 +60,12 @@ Which ML techniques we picked and why they are suited for our data
 - what do these results mean
 
 \section{Comparison}
+%milestones reached or not reached
+%changes from the original plan
 
-- milestones reached or not reached
+The original project proposal suggested three milestones for the optimization of nearest neighbors: minimum, expected, and stretch deliverables. The minimum deliverable was to implement a functional $\epsilon$-sphere nearest neighbor algorithm to predict whether or not a ligand will potentially respond and bind to a given receptor and to implement feature selection via information gain. This implementation was achieved and presented in the class SphereNearestNeighborPredictor.java in the "sphere" package of the "neighbors" project; the results and analysis of the run time and accuracy of this implementation is provided above in the Results section.
 
-- changes from the original plan
+The expected deliverable was to implement a faster $\epsilon$-sphere algorithm by using divide-and-conquer in lieu of a linear search for the $epsilon$ closest points to a test point, similar to a kd tree. However, this was not implemented because it was found via additional research (Indyk and Rajeev) that usage of kd trees in higher dimensions are no better than brute-force search since most nodes in the kd tree would need to be evaluated anyways.
 
 
 \section{Junk}
