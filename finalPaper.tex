@@ -63,6 +63,10 @@ There are a variety of characteristics that can help a ligand to bind to a recep
 \subsection{Algorithm Optimization}
 Since some of the receptor frames (the features) may not provide useful and accurate information about ligand binding potential, we decided to try to use a measure of Information Gain to select the best frames for distinguishing whether a ligand would bind or not.  Since we had many frames, there was thus a high dimensionality, so reducing the number of features using Information Gain would also help overcome the "Curse of Dimensionality."  
 
+Since the nearest neighbor algorithm requires iterating over all the training points for every single prediction, we considered creating a KD-Tree data structure to more quickly identify the nearest points.  However, upon further research we realized that KD-trees are not helpful in high-dimensional spaces.  For example, one general rule is that if the dimensionality is k, the number of points in the data, N, should be N much greater than $2^k$. If this is not the case, then a KD-tree will simply evaluate nearly all the points in the tree, and the efficiency is no better than exhaustive search (Goodman et al. 2004).  And in our case, we have $k=500$ and $N=710$ in which case using a KD-tree might even be slower than just exhaustive search.
+
+Next, we considered a Lambda-Means approach where we would use EM (Expectation Maximization) to cluster points that were close together in terms of Euclidean distance.  Then, when predicting, we would first compare to the prototype vectors and then would only need to compare to the points within that cluster to find the majority of labels of points within the distance $\epsilon$.  In a sense, this approach would be like sorting the training points into different buckets to speed up prediction time by ignoring points that have an average distance that is further away.
+
 
 \section{Results}
 - output
@@ -322,6 +326,11 @@ subject to be rejected without review.
 \newblock 1975.
 \newblock A branch and bound algorithm for computing k-nearest neighbors.
 \newblock {\em Computers, IEEE Transactions}, 100(7): 750-753.
+
+\bibitem[\protect\citename{Goodman, Jacob E., and Joseph O'Rourke.}2004]{Goodman, Jacob E., and Joseph O'Rourke: 04} Goodman, Jacob E., and Joseph O'Rourke.
+\newblock 2004.
+\newblock Handbook of discrete and computational geometry.
+\newblock {\em CRC press}, 2004.
 
 \bibitem[\protect\citename{Indyk, Piotr, and Rajeev Motwani.}1998] {Indyk, Piotr, and Rajeev Motwani: 98} Indyk, Piotr, and Rajeev Motwani.
 \newblock 1998.
