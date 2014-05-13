@@ -88,21 +88,45 @@ We wrote three python scripts to do this:
 \end{enumerate}
 
 \section{Results}
-The algorithm accuracy, precision, recall, and run time in milliseconds for the K-means algorithm is shown below for when all features are used and when only the fifty features with the highest information gain are used. \\
 
-\includegraphics[width=75mm]{kMeansData.png}
+For our 'ligand' data - the results were poor as we always had a precision of 0 and a recall of 0 for the development dataset.  Even as we changed epsilon and information gain, the precision and recall stayed at 0.  This indicates that the features did not have enough information to classify the 2 positive ligands correctly.  This was mainly a dataset problem from having so few positive ligands for data.
 
-The accuracy, precision, recall, and run time in milliseconds for the $\epsilon$-sphere nearest neighbor algorithm is shown below for when all features are used. \\
+Below are results based on the out synthetically generated 'ball' dataset:
+
+The accuracy, precision, recall, and runtime in milliseconds for the basic $\epsilon$-sphere nearest neighbor algorithm is shown below for when all 500 features are used. \\
 
 \includegraphics[width=75mm]{epsNNAllFeaturesData.png}
+
+To understand this table, take for example the row with epsilon as 30. 
+Accuracy 135/140 means 135 out of 140 of the development data ligands were classified correctly.  Precision 5/5 means that 5 of the development ligands were predicted correctly as 1's, and 5 ligands were predicted as 1's in total.  Recall 5/10 means that 5 of the development ligands were predicted correctly as 1's, and that was out of 10 ligands that were truly 1's.
+
+As this table illustrates, selecting the proper $\epsilon$ distance is key to having an effective algorithm.  Using an epsilon that is too large hinders precision and recall since each point is basically labeled with the majority label of all points (since all points fit into the $\epsilon$ ball distance).  Similarly, having an $\epsilon$ that is too small hinders precision and recall since each point does not have any neighboring points within the distance $\epsilon$ to get a correct prediction.
 
 The accuracy, precision, recall, and run time in milliseconds for the $\epsilon$-sphere nearest neighbor algorithm is shown below for $\epsilon=50$ for when different numbers of features are selected based on highest information gain. \\
 
 \includegraphics[width=75mm]{epsNNVaryFeaturesData.png}
 
-- what tests did we run
+The algorithm accuracy, precision, recall, and run time in milliseconds for the K-means algorithm is shown below for when all features are used and when only the fifty features with the highest information gain are used. \\
 
-- what do these results mean
+\includegraphics[width=75mm]{kMeansData.png}
+
+For our 'ligand' data above, we only had 8 positive binding ligands for training and only 2 positive binding ligands for development testing.  As such, the precision and binding measures were incredibly low even though the accuracy was high for the reasons described above.  Even when we implemented information gain to identify the best features and used fewer features, the precision and recall results were bad.  This indicates that there were not specific frames that had high information gain.  
+
+Then, we switched to our 'ball' data set where we had 40 positive binding ligands for training and 10 positives for development testing.
+
+With this data set, as we used fewer and fewer features for the basic $\epsilon$ algorithm, our precision and recall for the training data and the development test data decreased.  This indicates that we were losing information by not using all of the features even though we took the features with the highest Information Gain.
+
+
+Since we had so few positive binding ligands, accuracy was not a very useful measure of the effectiveness of our algorithm as it could achieve a high accuracy simply because the majority of the points were negative non-binding.  Therefore, we decided to implement Precision and Recall to evaluate our algorithm's effectiveness.
+
+Precision was defined as the number of correctly predicted ones (positive binding ligands) divided by the number of ones predicted.  Therefore, precision is a way of evaluating the false positive rate of our algorithm.
+
+Recall was defined as the number of correctly predicted ones (positive binding ligands) divided by the total of true ones (positive binding ligands) in the dataset.  Thus, recall was a way to evaluate the false negative rate of our algorithm.
+
+Then, for our K means $\epsilon$ algorithm, we were able to obtain a slight speedup of about 10% (from about 21
+seconds to about 19 seconds to train and predict over the training dataset).  However, when we switched to also use only the top 50 features by information gain with this algorithm, we were able to maintain a very high precision and recall and also speed up the algorithm.  In particular, training using all 500 features took about 19 seconds where as training using the top 50 features by information gain only took 1.9 seconds.  So our algorithm ran about 10 times faster.  Using 10 EM iterations for clustering resulted in about 149 clusters of points.  This means that the data points were not equally distributed amongst these clusters as the speedup was 10x faster rather than 149 times faster.
+
+The key discovery of our K means $\epsilon$ algorithm was that we were able to capture the data separation of the synthetic ball data where positive binding ligands had an average score of -8 with standard deviation 1 and the negative non-binding ligands had an average score of -6 with standard deviation 1.  Also, the K means $\epsilon$ algorithm also ran in a fast time which illustrates the power of our idea to bucket points that are close together in terms of Euclidean distance to improve the speed.
 
 \section{Future Work}
 Future work would be to test the basic $\epsilon$-sphere, nearest neighbors algorithm on a larger ligand-receptor dataset to see if having more positive binding ligands provides enough information to predict with better precision and recall.  Also, the larger dataset could be tested on the K-means $\epsilon$-sphere, nearest neighbors algorithm to verify how much speedup is achieved.
