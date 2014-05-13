@@ -7,6 +7,7 @@
 \usepackage{naaclhlt2010}
 \usepackage{times}
 \usepackage{latexsym}
+\usepackage{graphicx}
 \setlength\titlebox{6.5cm}    % Expanding the titlebox
 
 \title{Optimization of Nearest Neighbors: Run Time and Accuracy}
@@ -87,7 +88,9 @@ We wrote three python scripts to do this:
 \end{enumerate}
 
 \section{Results}
-- output
+The algorithm accuracy, precision, recall, and run time in milliseconds for the K-means algorithm is shown below for when all features are used and when only the fifty with the highest information gain are used.
+
+\includegraphics[width=75mm]{formattedData.png}
 
 - what tests did we run
 
@@ -97,12 +100,10 @@ We wrote three python scripts to do this:
 
 
 \section{Comparison}
-%milestones reached or not reached
-%changes from the original plan
 
 The original project proposal suggested three milestones for the optimization of nearest neighbors: minimum, expected, and stretch deliverables. The minimum deliverable was to implement a functional $\epsilon$-sphere nearest neighbor algorithm to predict whether or not a ligand will potentially respond and bind to a given receptor and to implement feature selection via information gain. This implementation was achieved and presented in the class SphereNearestNeighborPredictor.java in the "sphere" package of the "neighbors" project; the results and analysis of the run time and accuracy of this implementation is provided above in the Results section.
 
-The expected deliverable was to implement a faster $\epsilon$-sphere algorithm by using divide-and-conquer in lieu of a linear search for the $epsilon$ closest points to a test point, similar to a kd tree. However, this was not implemented because it was found via additional research (Indyk and Rajeev) that usage of kd trees in higher dimensions are no better than brute-force search since most nodes in the kd tree would need to be evaluated anyways.
+The expected deliverable was to implement a faster $\epsilon$-sphere algorithm by using divide-and-conquer in lieu of a linear search for the $epsilon$ closest points to a test point, similar to a kd tree. However, this was not implemented because it was found via additional research (Indyk and Rajeev) that usage of kd trees in higher dimensions are no better than brute-force search since most nodes in the kd tree would need to be evaluated anyways. Therefore, this deliverable was not implemented.
 
 The "Would like to achieve" deliverable was to implement a K-means approach of clustering the training data points by euclidean distance in order to speed-up the time of searching for nearest neighbors.  We finished this deliverable and implemented it in the class KMeansSpherePredictor.java in the "sphere" package of the "neighbors" project. The results and analysis of the runtime improvement and accuracy of this implementation is provided above in the Results section.
 
