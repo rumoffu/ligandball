@@ -4,3 +4,8 @@ models
 .metadata
 *.swp
 
+#tex
+*.aux
+*.pdf
+*.log
+*.gz
