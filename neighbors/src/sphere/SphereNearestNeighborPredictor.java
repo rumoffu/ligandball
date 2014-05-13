@@ -1,6 +1,6 @@
 /*
  * Kyle Wong, Tifany Yung
- * 14.5.11
+ * 14.5.12
  * Machine Learning
  * Final Project
  * Nearest Neighbors
@@ -17,14 +17,13 @@ import cs475.Label;
 import cs475.Predictor;
 import cs475.Util;
 
+/**
+ * This class is a label predictor that uses the epsilon-sphere nearest neighbors algorithm.
+ */
 @SuppressWarnings("serial")
 public class SphereNearestNeighborPredictor extends Predictor{
 	private double eps; // default epsilon value
 	
-//	private int number_of_features;
-//	private int num_clusters = 1;
-//	private int clustering_training_iterations;
-//	private ArrayList<ArrayList<Integer>> rnk = new ArrayList<ArrayList<Integer>>(); //track which instance's are in a cluster by id
 	private ArrayList<double[]> pts = new ArrayList<double[]>(); //track training pts
 	private int[] labels; // track training point labels
 	
@@ -38,7 +37,8 @@ public class SphereNearestNeighborPredictor extends Predictor{
 	private int numpred;
 	
 	/**
-	 * @param args
+	 * This main method is a test driver for the method in cs475.Util that calculates Euclidean distance.
+	 * @param args This method does not require any command-line arguments.
 	 */
 	public static void main(String[] args) {
 		Double[] a = new Double[2];
@@ -49,41 +49,46 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		b[1] = 1.0;
 		double c = Util.euclideanDistance(a, b);
 		System.out.println("euclidean distance expected 5: " + c);
-
-
 	}
 
+	/**
+	 * This method creates an instance of a label predictor that uses the epsilon-sphere nearest neighbors algorithm.
+	 * @param eps The value of epsilon to be used, the distance around a test point within which all data points should be used.
+	 * @param input_num_features The number of features in an instance.
+	 */
 	public SphereNearestNeighborPredictor(double eps, int input_num_features) {
 		this.eps = eps;
 
 		this.num_features_to_select = input_num_features;
 		this.distsum = 0;
 		this.numpred = 0;
-//		this.clustering_training_iterations = clustering_training_iterations;
-		
 	}
 	
+	/**
+	 * This method returns as String basic information about the epsilon-sphere nearest neighbor label predictor.
+	 * @return The number of features selected via information gain to be used, the epsilon value, and the average
+	 * distance between two points in the given dataset.
+	 */
 	public String toString() {
 		return "Basic Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps)
 				+ " average distance : " + String.valueOf(this.distsum / this.numpred);
 	}
 	
+	/**
+	 * This method trains the epsilon-sphere nearest neighbors algorithm.
+	 * Training involves reading in the data points from the training set, which includes each instance and the label it belongs to.
+	 * @param instances The training data points to use.
+	 */
 	public void train(List<Instance> instances) {
 
 		selectFeatures(instances);
 		double[] xi = new double[this.num_features_to_select];
-
-//		System.out.println("num features: " + this.num_features_to_select);
-//		this.number_of_features = Util.getMaxFeatureKey(instances);
 		
 		this.labels = new int[instances.size()];
-//		for(Instance e : instances){
 		for(int i = 0; i < instances.size(); i++) {
-//			xi = instances.get(i).getFeatureVector().getAlld(this.num_features_to_select);
 			double[] all = new double[this.num_features_to_select];
 			for (int j = 0; j < this.num_features_to_select; j++) {
 				all[j] = instances.get(i).getFeatureVector().get(this.bestgains[j]);
-//				all[j] = instances.get(i).getFeatureVector().get(j+1);
 			}
 			xi = all;
 			pts.add(xi);
@@ -91,21 +96,25 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		}
 	}
 	
+	/**
+	 * This method predicts the label of an instance using the epsilon-sphere nearest neighbor algorithm.
+	 * Prediction involves finding the majority label of all points within a Euclidean distance of epsilon.
+	 * from the test point and assigning the test point that label.
+	 * @param instance The test point whose label is to be predicted.
+	 * @return The label of the test point.
+	 */
 	public Label predict(Instance instance) {
 		double dist;
 		double[] xi = new double[this.num_features_to_select];
 		int ballcount = 0;
 		int positivecount = 0;
 		for(int k = 0; k < this.pts.size(); k++) { //for each training point 
-//			xi = instance.getFeatureVector().getAlld(this.num_features_to_select);
 			double[] all = new double[this.num_features_to_select];
 			for (int j = 0; j < this.num_features_to_select; j++) {
 				all[j] = instance.getFeatureVector().get(this.bestgains[j]);
-//				all[j] = instances.get(i).getFeatureVector().get(j+1);
 			}
 			xi = all;
 			dist = Util.euclideanDistance(xi, pts.get(k));
-//			System.out.println(dist);
 			this.distsum += dist;
 			this.numpred++;
 			if(dist < this.eps){ // within epsilon ball radius
@@ -121,6 +130,11 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		}
 	}
 	
+	/**
+	 * This method selects the best num_features_to_select features to use based on information gain,
+	 * where num_features_to_select was inputed via command-line argument.
+	 * @param instances The training data points.
+	 */
 	private void selectFeatures(List<Instance> instances){
 
 		Double thresh_sum;
@@ -134,8 +148,7 @@ public class SphereNearestNeighborPredictor extends Predictor{
 			num_features_to_select = maxkey;
 		}
 		
-		// ???? remove this?
-		if(maxkey < num_features_to_select){ //KTW was less than..?
+		if(maxkey < num_features_to_select){
 			maxkey = num_features_to_select;
 		}
 		
@@ -173,21 +186,16 @@ public class SphereNearestNeighborPredictor extends Predictor{
 			// calculate IG for this feature
 			pxj = px / instances.size();
 			pyixj0 = pyx0 / instances.size();
-			pyixj1 = pyx1 / instances.size();//log of 0 is NaN - might be a problem when lacking train data
+			pyixj1 = pyx1 / instances.size(); //log of 0 is NaN - might be a problem when lacking train data
 			if (pyixj0 == 0 || pyixj1 == 0) {
 				this.infogains[i] = 0.0;
 			}
 			else {
 				int factor = 1;
 				this.infogains[i] = factor*pyixj0*Math.log(pyixj0 / pxj) + factor* pyixj1*Math.log(pyixj1 / pxj);
-//			this.infogains[i] = -1*pyixj0*Math.log(pyixj0 / pxj) + -1* pyixj1*Math.log(pyixj1 / pxj);
 			}
-			
-//			double temp = this.infogains[i]; 
-//			System.out.printf("%s %s\n", i, temp);
 		}
-//		for(int k = 0; k < infogains.length; k++) System.out.printf("infogains %s %s\n", k, infogains[k]);
-
+		
 		// select the features with best IG and save their id
 		this.bestgains = new int[this.num_features_to_select];
 		double[] bestvalues = new double[this.num_features_to_select];
@@ -195,7 +203,7 @@ public class SphereNearestNeighborPredictor extends Predictor{
 			this.weights[j] = 0.0;
 			double bestig = Double.NEGATIVE_INFINITY;
 			int bestid = 0;
-			for(int i = 0; i < maxkey; i++){ //KTW should be maxkey? was num_features_to_select
+			for(int i = 0; i < maxkey; i++){ // was num_features_to_select
 				if(bestig < this.infogains[i]){ // was <=, but it seems to skip some
 					bestig = this.infogains[i];
 					bestid = i;
@@ -204,10 +212,8 @@ public class SphereNearestNeighborPredictor extends Predictor{
 			this.bestgains[j] = bestid+1; //features are 1 based, not 0 based
 			bestvalues[j] = bestig; // save the best value for checking
 			this.infogains[bestid] = Double.NEGATIVE_INFINITY;
-//			System.out.println("bestid: "+bestgains[j]+" bestvalues: " + bestvalues[j]); //verified speech.train
 		}
 		Arrays.sort(bestgains); // to track weight with feature number ordering //KTW
-//		for(int j = 0; j < num_features_to_select; j++) System.out.println("bestid: "+bestgains[j]+" bestvalues: " + bestvalues[j]);
 	}
 }
 

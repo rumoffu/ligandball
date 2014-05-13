@@ -29,6 +29,7 @@ public class Classify {
 	final static long startTime = System.currentTimeMillis();
 	public static void main(String[] args) throws IOException {
 //		startTime = System.currentTimeMillis();
+		
 		// Parse the command line.
 		String[] manditory_args = { "mode"};
 		createCommandLineOptions();
