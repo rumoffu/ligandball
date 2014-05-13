@@ -1,0 +1,304 @@
+%
+% File naaclhlt2010.tex
+%
+% Contact: nasmith@cs.cmu.edu
+
+\documentclass[11pt,letterpaper]{article}
+\usepackage{naaclhlt2010}
+\usepackage{times}
+\usepackage{latexsym}
+\setlength\titlebox{6.5cm}    % Expanding the titlebox
+
+\title{Optimization of Nearest Neighbors: Run Time and Accuracy}
+
+\author{Kyle Wong \\
+  3400 N. Charles St. \\
+  Baltimore, MD 21218 \\
+  {\tt kwong5@jhu.edu}
+  \And
+  Tifany Yung \\
+  3400 N. Charles St. \\
+  Baltimore, MD 21218 \\
+  {\tt tyung1@jhu.edu}}
+
+\date{May 12, 2014}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+Ligands can react with a particular receptor in one of three ways: bind and activate the receptor, bind and inhibit the receptor, and not bind at all. Whether a ligand is likely to bind to a receptor can be determined by considering the features such as ligand and receptor shapes, charges, and molecular forces. All of the factors can be accounted via the fred score.
+
+Since the relative positions of the ligand and receptor affect the likelihood of binding, the fred scores for 500 frames for each ligand were taken to help determine whether that particular ligand will bind with the receptor. These 500 frames will be used as the features and will be the feature vector for the ligand instance.
+
+The labeled ligand instances and their 500-fred-score-long feature vectors will be used to train the $\epsilon$-sphere, nearest neighbors algorithm. The algorithm will then be employed on test instances to determine if the test ligand will bind to the given receptor.
+\end{abstract}
+
+\section{Introduction}
+
+The $\epsilon$-sphere nearest neighbors algorithm is a close relative of the K-nearest neighbors algorithm; both are clustering algorithms designed with the purpose of categorizing data into a certain number of categories, or labels. As an example, for the ligand-receptor data used, the ligands would be labeled with whether or not they could potentially bind with a given receptor.
+
+Clustering algorithms work by using nearby points to determine which cluster or label a given point should be placed in based on the labels of the points around it. The only difference between above-mentioned $\epsilon$-sphere and K nearest neighbors is the number of points around the test point that is used to help determine the test point's label. In the K nearest neighbors algorithm, the K points closest to the test point are taken, and the test point is assigned the majority label amongst those points; in the $\epsilon$-sphere algorithm, all points that are within a Euclidean distance of $\epsilon$ from the test point are used.
+
+The general structure of the $\epsilon$-sphere clustering algorithm is the same as any machine learning algorithm: teaching the algorithm using a training dataset, and test the accuracy of the algorithm with a development dataset. During training, the training data points are simply read in and stored. Since the training data is already labeled, the training data points are already separated into clusters.
+
+During testing, unlabeled data points are inputted individually, and the algorithm attempts to place them in a cluster. It does so by taking all data points within $\epsilon$ of the test point and calculating the majority label amongst those points. The test point is then assigned to that majority label and added to the cluster, so the test point will influence the labels of future test points. Testing continues as more test points are labeled and added to the clusters.
+
+There has been some previous research into speeding up K nearest neighbors by using $\epsilon$-sphere. Indyk and Rajeev (1998) first implemented and tested a kd-tree for the $\epsilon$-sphere algorithm and recommended it only for low-dimensional data. More recently, Muja and Lowe attempted to find fast approximates for the nearest neighbors algorithm.
+
+
+
+
+\section{General Instructions}
+
+Manuscripts must be in two-column format.  Exceptions to the
+two-column format include the title, authors' names and complete
+addresses, which must be centered at the top of the first page (see
+the guidelines in Subsection~\ref{ssec:first}), and any full-width
+figures or tables .  Type single-spaced.  Do not number the pages.
+Start all pages directly under the top margin.  See the guidelines
+later regarding formatting the first page.
+
+The maximum length of a manuscript is eight (8) pages for the main
+conference, printed single-sided, plus one (1) page for references
+(see Section~\ref{sec:length} for additional information on the
+maximum number of pages).  Do not number the pages.
+
+\subsection{Electronically-available resources}
+
+NAACL HLT provides this description in \LaTeX2e{} ({\tt naaclhlt2010.tex}) and PDF
+format ({\tt naaclhlt2010.pdf}), along with the \LaTeX2e{} style file used to
+format it ({\tt naaclhlt2010.sty}) and an ACL bibliography style ({\tt naaclhlt2010.bst}).
+These files are all available at
+{\tt http://naaclhlt2010.isi.edu}.  A Microsoft Word
+template file ({\tt naaclhlt2010.dot}) is also available at the same URL. We
+strongly recommend the use of these style files, which have been
+appropriately tailored for the NAACL HLT 2010 proceedings.
+
+
+\subsection{Format of Electronic Manuscript}
+\label{sect:pdf}
+
+For the production of the electronic manuscript you must use Adobe's
+Portable Document Format (PDF). This format can be generated from
+postscript files: on Unix systems, you can use {\tt ps2pdf} for this
+purpose; under Microsoft Windows, you can use Adobe's Distiller, or
+if you have cygwin installed, you can use {\tt dvipdf} or
+{\tt ps2pdf}.  Note 
+that some word processing programs generate PDF which may not include
+all the necessary fonts (esp. tree diagrams, symbols). When you print
+or create the PDF file, there is usually an option in your printer
+setup to include none, all or just non-standard fonts.  Please make
+sure that you select the option of including ALL the fonts.  {\em
+  Before sending it, test your {\/\em PDF} by printing it from a
+  computer different from the one where it was created}. Moreover,
+some word processor may generate very large postscript/PDF files,
+where each page is rendered as an image. Such images may reproduce
+poorly.  In this case, try alternative ways to obtain the postscript
+and/or PDF.  One way on some systems is to install a driver for a
+postscript printer, send your document to the printer specifying
+``Output to a file'', then convert the file to PDF.
+
+For reasons of uniformity, Adobe's {\bf Times Roman} font should be
+used. In \LaTeX2e{} this is accomplished by putting
+
+\begin{quote}
+\begin{verbatim}
+\usepackage{times}
+\usepackage{latexsym}
+\end{verbatim}
+\end{quote}
+in the preamble.
+
+Additionally, it is of utmost importance to specify the {\bf
+  US-Letter format} (8.5in $\times$ 11in) when formatting the paper.
+When working with {\tt dvips}, for instance, one should specify {\tt
+  -t letter}.
+
+Print-outs of the PDF file on US-Letter paper should be identical to the
+hardcopy version.  If you cannot meet the above requirements about the
+production of your electronic submission, please contact the
+publication chairs above  as soon as possible.
+
+
+\subsection{Layout}
+\label{ssec:layout}
+
+Format manuscripts two columns to a page, in the manner these
+instructions are formatted. The exact dimensions for a page on US-letter
+paper are:
+
+\begin{itemize}
+\item Left and right margins: 1in
+\item Top margin:1in
+\item Bottom margin: 1in
+\item Column width: 3.15in
+\item Column height: 9in
+\item Gap between columns: 0.2in
+\end{itemize}
+
+\noindent Papers should not be submitted on any other paper size. Exceptionally,
+authors for whom it is \emph{impossible} to format on US-Letter paper,
+may format for \emph{A4} paper. In this case, they should keep the \emph{top}
+and \emph{left} margins as given above, use the same column width,
+height and gap, and modify the bottom and right margins as necessary.
+Note that the text will no longer be centered.
+
+\subsection{The First Page}
+\label{ssec:first}
+
+Center the title, author's name(s) and affiliation(s) across both
+columns. Do not use footnotes for affiliations.  Do not include the
+paper ID number assigned during the submission process. 
+Use the two-column format only when you begin the abstract.
+
+{\bf Title}: Place the title centered at the top of the first page, in
+a 15 point bold font.  (For a complete guide to font sizes and styles, see Table~\ref{font-table}.)
+Long title should be typed on two lines without
+a blank line intervening. Approximately, put the title at 1in from the
+top of the page, followed by a blank line, then the author's names(s),
+and the affiliation on the following line.  Do not use only initials
+for given names (middle initials are allowed). Do not format surnames
+in all capitals (e.g., ``Leacock,'' not ``LEACOCK'').  The affiliation should
+contain the author's complete address, and if possible an electronic
+mail address. Leave about 0.75in between the affiliation and the body
+of the first page.
+
+{\bf Abstract}: Type the abstract at the beginning of the first
+column.  The width of the abstract text should be smaller than the
+width of the columns for the text in the body of the paper by about
+0.25in on each side.  Center the word {\bf Abstract} in a 12 point
+bold font above the body of the abstract. The abstract should be a
+concise summary of the general thesis and conclusions of the paper.
+It should be no longer than 200 words.  The abstract text should be in 10 point font.
+
+{\bf Text}: Begin typing the main body of the text immediately after
+the abstract, observing the two-column format as shown in 
+the present document.  Do not include page numbers.
+
+{\bf Indent} when starting a new paragraph. For reasons of uniformity,
+use Adobe's {\bf Times Roman} fonts, with 11 points for text and 
+subsection headings, 12 points for section headings and 15 points for
+the title.  If Times Roman is unavailable, use {\bf Computer Modern
+  Roman} (\LaTeX2e{}'s default; see section \ref{sect:pdf} above).
+Note that the latter is about 10\% less dense than Adobe's Times Roman
+font.
+
+\subsection{Sections}
+
+{\bf Headings}: Type and label section and subsection headings in the
+style shown on the present document.  Use numbered sections (Arabic
+numerals) in order to facilitate cross references. Number subsections
+with the section number and the subsection number separated by a dot,
+in Arabic numerals. 
+
+{\bf Citations}: Citations within the text appear
+in parentheses as~\cite{Gusfield:97} or, if the author's name appears in
+the text itself, as Gusfield~\shortcite{Gusfield:97}. 
+Append lowercase letters to the year in cases of ambiguities.  
+Treat double authors as in~\cite{Aho:72}, but write as 
+in~\cite{Chandra:81} when more than two authors are involved. 
+Collapse multiple citations as in~\cite{Gusfield:97,Aho:72}.
+
+\textbf{References}: Gather the full set of references together under
+the heading {\bf References}; place the section before any Appendices,
+unless they contain references. Arrange the references alphabetically
+by first author, rather than by order of occurrence in the text.
+Provide as complete a citation as possible, using a consistent format,
+such as the one for {\em Computational Linguistics\/} or the one in the 
+{\em Publication Manual of the American 
+Psychological Association\/}~\cite{APA:83}.  Use of full names for
+authors rather than initials is preferred.  A list of abbreviations
+for common computer science journals can be found in the ACM 
+{\em Computing Reviews\/}~\cite{ACM:83}.
+
+The \LaTeX{} and Bib\TeX{} style files provided roughly fit the
+American Psychological Association format, allowing regular citations, 
+short citations and multiple citations as described above.
+
+{\bf Appendices}: Appendices, if any, directly follow the text and the
+references (but see above).  Letter them in sequence and provide an
+informative title: {\bf Appendix A. Title of Appendix}.
+
+\textbf{Acknowledgment} sections should go as a last (unnumbered) section immediately
+before the references.  
+
+\subsection{Footnotes}
+
+{\bf Footnotes}: Put footnotes at the bottom of the page. They may
+be numbered or referred to by asterisks or other
+symbols.\footnote{This is how a footnote should appear.} Footnotes
+should be separated from the text by a line.\footnote{Note the
+line separating the footnotes from the text.}  Footnotes should be in 9 point font.
+
+\subsection{Graphics}
+
+{\bf Illustrations}: Place figures, tables, and photographs in the
+paper near where they are first discussed, rather than at the end, if
+possible.  Wide illustrations may run across both columns and should be placed at
+the top of a page. Color illustrations are discouraged, unless you have verified that 
+they will be understandable when printed in black ink.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|rl|}
+\hline \bf Type of Text & \bf Font Size & \bf Style \\ \hline
+paper title & 15 pt & bold \\
+author names & 12 pt & bold \\
+author affiliation & 12 pt & \\
+the word ``Abstract'' & 12 pt & bold \\
+section titles & 12 pt & bold \\
+document text & 11 pt  &\\
+abstract text & 10 pt & \\
+captions & 10 pt & \\
+bibliography & 10 pt & \\
+footnotes & 9 pt & \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\label{font-table} Font guide. }
+\end{table}
+
+{\bf Captions}: Provide a caption for every illustration; number each one
+sequentially in the form:  ``Figure 1. Caption of the Figure.'' ``Table 1.
+Caption of the Table.''  Type the captions of the figures and 
+tables below the body, using 10 point text.  
+
+\section{Length of Submission}
+\label{sec:length}
+
+The NAACL HLT 2010 main conference accepts submissions of long papers
+and short papers.  The maximum length of a long paper manuscript is
+eight (8) pages of content and one (1) additional page of references
+\emph{only} (appendices count against the eight pages, not the
+additional one page).  The maximum length of a short paper manuscript
+is four (4) pages including references.  For both long and short
+papers, all illustrations, references, and appendices must be
+accommodated within these page limits, observing the formatting
+instructions given in the present document.  Papers that do not
+conform to the specified length and formatting requirements are
+subject to be rejected without review.
+
+
+\begin{thebibliography}{}
+\bibitem[\protect\citename{Cover, Thomas, and Peter Hart.}1967]{Cover, Thomas, and Peter Hart: 67} Cover, Thomas, and Peter Hart.
+\newblock 1967.
+\newblock Nearest neighbor pattern classification.
+\newblock {\em Information Theory, IEEE Transactions}, 13(1):21-27.
+
+\bibitem[\protect\citename{Indyk, Piotr, and Rajeev Motwani.}1998] {Indyk, Piotr, and Rajeev Motwani: 98} Indyk, Piotr, and Rajeev Motwani.
+\newblock 1998.
+\newblock Approximate nearest neighbors: towards removing the curse of dimensionality.
+\newblock {\em Proceedings of the thirtieth annual ACM symposium on Theory of computing.}
+
+\bibitem[\protect\citename{Muja, Marius, and David G. Lowe.}2009] {Muja, Marius, and David G. Lowe: 09} Muja, Marius, and David G. Lowe.
+\newblock 2009.
+\newblock Fast Approximate Nearest Neighbors with Automatic Algorithm Configuration.
+\newblock {\em VISAPP}, 2009.
+
+\bibitem[\protect\citename{Fukunaga, Keinosuke, and Patrenahalli M. Narendra.}1975] {Fukunaga, Keinosuke, and Patrenahalli M. Narendra: 75} Fukunaga, Keinosuke, and Patrenahalli M. Narendra.
+\newblock 1975.
+\newblock A branch and bound algorithm for computing k-nearest neighbors.
+\newblock {\em Computers, IEEE Transactions}, 100(7): 750-753.
+\end{thebibliography}
+
+\end{document}
