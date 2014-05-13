@@ -31,7 +31,7 @@ Ligands can react with a particular receptor in one of three ways: bind and acti
 
 Since the relative positions of both the ligand and receptor affect the likelihood of binding, the FRED scores for 500 receptor frames crossed with each of 710 ligands were taken to create a system for predicting whether a particular ligand will bind with the receptor. These 500 frames were used as the features for feature vectors with the ligands as an instances.
 
-The labeled ligand instances and their 500-FRED-score-long feature vectors were used to train a basic $\epsilon$-sphere, nearest neighbors algorithm with low precision and recall results. The algorithm was then improved by selecting features with information gain and testing with different $\epsilon$ values.  However, the original dataset proved to be too small and limited to get conclusive results.  Synthetic data was then generated for testing and improving the nearest neighbors algorithm.  Then, the nearest neighbors algorithm was improved using a Lamba Means EM (Expectation Maximization) algorithm to cluster the data points with highly positive results.  
+The labeled ligand instances and their 500-FRED-score-long feature vectors were used to train a basic $\epsilon$-sphere, nearest neighbors algorithm with low precision and recall results. The algorithm was then improved by selecting features with information gain and testing with different $\epsilon$ values.  However, the original dataset proved to be too small and limited to get conclusive results.  Synthetic data was then generated for testing and improving the nearest neighbors algorithm.  Then, the nearest neighbors algorithm was improved using a K Means EM (Expectation Maximization) algorithm to cluster the data points with highly positive results.  
 \end{abstract}
 
 \section{Introduction}
@@ -68,6 +68,24 @@ Since the nearest neighbor algorithm requires iterating over all the training po
 
 Thus, we instead implemented a Lambda-Means approach where we would use EM (Expectation Maximization) to cluster points that were close together in terms of Euclidean distance.  Then, when predicting, we would first compare to the prototype vectors and then would only need to compare to the points within that cluster to find the majority of labels of points within the distance $\epsilon$.  In a sense, this approach would be like sorting the training points into different buckets to speed up prediction time by ignoring points that have an average distance that is further away.  This would give us a way to improve the slow runtime of the nearest neighbor algorithm which normally exhaustively must check against all of the training points while not sacrificing accuracy.
 
+\section{Problems Encountered - Data}
+\subsection{Ligand Data Problems}
+One major setback was the loss of data from the Data Management Systems lab (DAMSL) due to the crash of two RAID Array Controllers.  Thus, this projected was limited in its data to only 10 positive binding ligand instances and only 690 negative non-binding ligand instances.  This proved difficult for splitting the data into dev and train data.  We decided to do a 80\% train 20\% development data split, but that still only have us 8 positive training ligand examples and only 2 positive development testing ligand examples.  Furthermore, due to the DAMSL data loss, we were unable to get more data for testing.  
+
+As for the data itself, it was difficult to find a good optimization.  This seems to be a result of the FRED cg4 scores themselves as the data is not highly indicative of being able to distinguish between positive binding ligands and negative non-binding ligands.  In particular, when we performed statistics on the data, we found that the average FRED score for positive binding ligands and negative non-binding ligands was about the same at a value of around -6.5 and even their standard deviation was about the same of about 1.35
+
+\subsection{Synthetically Generated Data - Ball}
+In order to create a more helpful dataset, we generated a dataset called "ball" under the idea that positive binding ligands would have an average binding score of -8 with standard deviation of 1 and that negative non-binding ligands would have an average binding score of -6 with standard deviation of 1.  This synthetic dataset would thus allow us to test our algorithm knowing that the classification would be possible while still having points that overlapped between these two ball regions.
+
+Further, we created this dataset with 50 positive binding ligand instances and with 650 negative non-binding ligands.  This would help us to have a larger number of positive training and development testing examples for evaluating our $\epsilon$-sphere, nearest neighbors algorithm.  We still opted to do a 80\% train 20\% development data split.
+
+We wrote three python scripts to do this: 
+
+\begin{enumerate} 	
+	\item csvgen.py to write a comma separated value set similar to what FRED docking would give: compoundstate-id, result (1 or 0), frame-id, FRED cg4 score
+	\item keygen.py to format the csv into the same format as data files from class where each line represents a ligand instance with the frames being the features listed
+	\item dev.py to split the data into 80\% train 20\% development data
+\end{enumerate}
 
 \section{Results}
 The algorithm accuracy, precision, recall, and run time in milliseconds for the K-means algorithm is shown below for when all features are used and when only the fifty with the highest information gain are used.
@@ -78,242 +96,19 @@ The algorithm accuracy, precision, recall, and run time in milliseconds for the 
 
 - what do these results mean
 
+\section{Future Work}
+
+
 \section{Comparison}
 
 The original project proposal suggested three milestones for the optimization of nearest neighbors: minimum, expected, and stretch deliverables. The minimum deliverable was to implement a functional $\epsilon$-sphere nearest neighbor algorithm to predict whether or not a ligand will potentially respond and bind to a given receptor and to implement feature selection via information gain. This implementation was achieved and presented in the class SphereNearestNeighborPredictor.java in the "sphere" package of the "neighbors" project; the results and analysis of the run time and accuracy of this implementation is provided above in the Results section.
 
 The expected deliverable was to implement a faster $\epsilon$-sphere algorithm by using divide-and-conquer in lieu of a linear search for the $epsilon$ closest points to a test point, similar to a kd tree. However, this was not implemented because it was found via additional research (Indyk and Rajeev) that usage of kd trees in higher dimensions are no better than brute-force search since most nodes in the kd tree would need to be evaluated anyways. Therefore, this deliverable was not implemented.
 
-Instead, the time was used to implemented 
+The "Would like to achieve" deliverable was to implement a K-means approach of clustering the training data points by euclidean distance in order to speed-up the time of searching for nearest neighbors.  We finished this deliverable and implemented it in the class KMeansSpherePredictor.java in the "sphere" package of the "neighbors" project. The results and analysis of the runtime improvement and accuracy of this implementation is provided above in the Results section.
+
 
 \section{Junk}
-Manuscripts must be in two-column format.  Exceptions to the
-two-column format include the title, authors' names and complete
-addresses, which must be centered at the top of the first page (see
-the guidelines in Subsection~\ref{ssec:first}), and any full-width
-figures or tables .  Type single-spaced.  Do not number the pages.
-Start all pages directly under the top margin.  See the guidelines
-later regarding formatting the first page.
-
-The maximum length of a manuscript is eight (8) pages for the main
-conference, printed single-sided, plus one (1) page for references
-(see Section~\ref{sec:length} for additional information on the
-maximum number of pages).  Do not number the pages.
-
-\subsection{Electronically-available resources}
-
-NAACL HLT provides this description in \LaTeX2e{} ({\tt naaclhlt2010.tex}) and PDF
-format ({\tt naaclhlt2010.pdf}), along with the \LaTeX2e{} style file used to
-format it ({\tt naaclhlt2010.sty}) and an ACL bibliography style ({\tt naaclhlt2010.bst}).
-These files are all available at
-{\tt http://naaclhlt2010.isi.edu}.  A Microsoft Word
-template file ({\tt naaclhlt2010.dot}) is also available at the same URL. We
-strongly recommend the use of these style files, which have been
-appropriately tailored for the NAACL HLT 2010 proceedings.
-
-
-\subsection{Format of Electronic Manuscript}
-\label{sect:pdf}
-
-For the production of the electronic manuscript you must use Adobe's
-Portable Document Format (PDF). This format can be generated from
-postscript files: on Unix systems, you can use {\tt ps2pdf} for this
-purpose; under Microsoft Windows, you can use Adobe's Distiller, or
-if you have cygwin installed, you can use {\tt dvipdf} or
-{\tt ps2pdf}.  Note 
-that some word processing programs generate PDF which may not include
-all the necessary fonts (esp. tree diagrams, symbols). When you print
-or create the PDF file, there is usually an option in your printer
-setup to include none, all or just non-standard fonts.  Please make
-sure that you select the option of including ALL the fonts.  {\em
-  Before sending it, test your {\/\em PDF} by printing it from a
-  computer different from the one where it was created}. Moreover,
-some word processor may generate very large postscript/PDF files,
-where each page is rendered as an image. Such images may reproduce
-poorly.  In this case, try alternative ways to obtain the postscript
-and/or PDF.  One way on some systems is to install a driver for a
-postscript printer, send your document to the printer specifying
-``Output to a file'', then convert the file to PDF.
-
-For reasons of uniformity, Adobe's {\bf Times Roman} font should be
-used. In \LaTeX2e{} this is accomplished by putting
-
-\begin{quote}
-\begin{verbatim}
-\usepackage{times}
-\usepackage{latexsym}
-\end{verbatim}
-\end{quote}
-in the preamble.
-
-Additionally, it is of utmost importance to specify the {\bf
-  US-Letter format} (8.5in $\times$ 11in) when formatting the paper.
-When working with {\tt dvips}, for instance, one should specify {\tt
-  -t letter}.
-
-Print-outs of the PDF file on US-Letter paper should be identical to the
-hardcopy version.  If you cannot meet the above requirements about the
-production of your electronic submission, please contact the
-publication chairs above  as soon as possible.
-
-
-\subsection{Layout}
-\label{ssec:layout}
-
-Format manuscripts two columns to a page, in the manner these
-instructions are formatted. The exact dimensions for a page on US-letter
-paper are:
-
-\begin{itemize}
-\item Left and right margins: 1in
-\item Top margin:1in
-\item Bottom margin: 1in
-\item Column width: 3.15in
-\item Column height: 9in
-\item Gap between columns: 0.2in
-\end{itemize}
-
-\noindent Papers should not be submitted on any other paper size. Exceptionally,
-authors for whom it is \emph{impossible} to format on US-Letter paper,
-may format for \emph{A4} paper. In this case, they should keep the \emph{top}
-and \emph{left} margins as given above, use the same column width,
-height and gap, and modify the bottom and right margins as necessary.
-Note that the text will no longer be centered.
-
-\subsection{The First Page}
-\label{ssec:first}
-
-Center the title, author's name(s) and affiliation(s) across both
-columns. Do not use footnotes for affiliations.  Do not include the
-paper ID number assigned during the submission process. 
-Use the two-column format only when you begin the abstract.
-
-{\bf Title}: Place the title centered at the top of the first page, in
-a 15 point bold font.  (For a complete guide to font sizes and styles, see Table~\ref{font-table}.)
-Long title should be typed on two lines without
-a blank line intervening. Approximately, put the title at 1in from the
-top of the page, followed by a blank line, then the author's names(s),
-and the affiliation on the following line.  Do not use only initials
-for given names (middle initials are allowed). Do not format surnames
-in all capitals (e.g., ``Leacock,'' not ``LEACOCK'').  The affiliation should
-contain the author's complete address, and if possible an electronic
-mail address. Leave about 0.75in between the affiliation and the body
-of the first page.
-
-{\bf Abstract}: Type the abstract at the beginning of the first
-column.  The width of the abstract text should be smaller than the
-width of the columns for the text in the body of the paper by about
-0.25in on each side.  Center the word {\bf Abstract} in a 12 point
-bold font above the body of the abstract. The abstract should be a
-concise summary of the general thesis and conclusions of the paper.
-It should be no longer than 200 words.  The abstract text should be in 10 point font.
-
-{\bf Text}: Begin typing the main body of the text immediately after
-the abstract, observing the two-column format as shown in 
-the present document.  Do not include page numbers.
-
-{\bf Indent} when starting a new paragraph. For reasons of uniformity,
-use Adobe's {\bf Times Roman} fonts, with 11 points for text and 
-subsection headings, 12 points for section headings and 15 points for
-the title.  If Times Roman is unavailable, use {\bf Computer Modern
-  Roman} (\LaTeX2e{}'s default; see section \ref{sect:pdf} above).
-Note that the latter is about 10\% less dense than Adobe's Times Roman
-font.
-
-\subsection{Sections}
-
-{\bf Headings}: Type and label section and subsection headings in the
-style shown on the present document.  Use numbered sections (Arabic
-numerals) in order to facilitate cross references. Number subsections
-with the section number and the subsection number separated by a dot,
-in Arabic numerals. 
-
-{\bf Citations}: Citations within the text appear
-in parentheses as~\cite{Gusfield:97} or, if the author's name appears in
-the text itself, as Gusfield~\shortcite{Gusfield:97}. 
-Append lowercase letters to the year in cases of ambiguities.  
-Treat double authors as in~\cite{Aho:72}, but write as 
-in~\cite{Chandra:81} when more than two authors are involved. 
-Collapse multiple citations as in~\cite{Gusfield:97,Aho:72}.
-
-\textbf{References}: Gather the full set of references together under
-the heading {\bf References}; place the section before any Appendices,
-unless they contain references. Arrange the references alphabetically
-by first author, rather than by order of occurrence in the text.
-Provide as complete a citation as possible, using a consistent format,
-such as the one for {\em Computational Linguistics\/} or the one in the 
-{\em Publication Manual of the American 
-Psychological Association\/}~\cite{APA:83}.  Use of full names for
-authors rather than initials is preferred.  A list of abbreviations
-for common computer science journals can be found in the ACM 
-{\em Computing Reviews\/}~\cite{ACM:83}.
-
-The \LaTeX{} and Bib\TeX{} style files provided roughly fit the
-American Psychological Association format, allowing regular citations, 
-short citations and multiple citations as described above.
-
-{\bf Appendices}: Appendices, if any, directly follow the text and the
-references (but see above).  Letter them in sequence and provide an
-informative title: {\bf Appendix A. Title of Appendix}.
-
-\textbf{Acknowledgment} sections should go as a last (unnumbered) section immediately
-before the references.  
-
-\subsection{Footnotes}
-
-{\bf Footnotes}: Put footnotes at the bottom of the page. They may
-be numbered or referred to by asterisks or other
-symbols.\footnote{This is how a footnote should appear.} Footnotes
-should be separated from the text by a line.\footnote{Note the
-line separating the footnotes from the text.}  Footnotes should be in 9 point font.
-
-\subsection{Graphics}
-
-{\bf Illustrations}: Place figures, tables, and photographs in the
-paper near where they are first discussed, rather than at the end, if
-possible.  Wide illustrations may run across both columns and should be placed at
-the top of a page. Color illustrations are discouraged, unless you have verified that 
-they will be understandable when printed in black ink.
-
-\begin{table}
-\begin{center}
-\begin{tabular}{|l|rl|}
-\hline \bf Type of Text & \bf Font Size & \bf Style \\ \hline
-paper title & 15 pt & bold \\
-author names & 12 pt & bold \\
-author affiliation & 12 pt & \\
-the word ``Abstract'' & 12 pt & bold \\
-section titles & 12 pt & bold \\
-document text & 11 pt  &\\
-abstract text & 10 pt & \\
-captions & 10 pt & \\
-bibliography & 10 pt & \\
-footnotes & 9 pt & \\
-\hline
-\end{tabular}
-\end{center}
-\caption{\label{font-table} Font guide. }
-\end{table}
-
-{\bf Captions}: Provide a caption for every illustration; number each one
-sequentially in the form:  ``Figure 1. Caption of the Figure.'' ``Table 1.
-Caption of the Table.''  Type the captions of the figures and 
-tables below the body, using 10 point text.  
-
-\section{Length of Submission}
-\label{sec:length}
-
-The NAACL HLT 2010 main conference accepts submissions of long papers
-and short papers.  The maximum length of a long paper manuscript is
-eight (8) pages of content and one (1) additional page of references
-\emph{only} (appendices count against the eight pages, not the
-additional one page).  The maximum length of a short paper manuscript
-is four (4) pages including references.  For both long and short
-papers, all illustrations, references, and appendices must be
-accommodated within these page limits, observing the formatting
-instructions given in the present document.  Papers that do not
-conform to the specified length and formatting requirements are
-subject to be rejected without review.
 
 
 \begin{thebibliography}{}
