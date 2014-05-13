@@ -100,7 +100,7 @@ public class KMeansSpherePredictor extends Predictor{
 		// Calculate clusters for the points
 		
 		// Initialize prototype vector to the mean of all instances
-		this.num_features_to_select = Util.getMaxFeatureKey(instances);
+//		this.num_features_to_select = Util.getMaxFeatureKey(instances);
 		double[] sum = new double[this.num_features_to_select];
 		for(int i = 0; i < this.num_features_to_select; i++){
 			sum[i] = 0.0;
