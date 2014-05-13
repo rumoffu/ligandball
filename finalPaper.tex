@@ -14,7 +14,7 @@
 \author{Kyle Wong \\
   3400 N. Charles St. \\
   Baltimore, MD 21218 \\
-  {\tt kwong5@jhu.edu}
+  {\tt kwong23@jhu.edu}
   \And
   Tifany Yung \\
   3400 N. Charles St. \\
@@ -26,11 +26,11 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-Ligands can react with a particular receptor in one of three ways: bind and activate the receptor, bind and inhibit the receptor, and not bind at all. Whether a ligand is likely to bind to a receptor can be determined by considering the features such as ligand and receptor shapes, charges, and molecular forces. All of the factors can be accounted via the fred score.
+Ligands can react with a particular receptor in one of three ways: bind and activate the receptor, bind and inhibit the receptor, and not bind at all. Whether a ligand is likely to bind to a receptor can be determined by considering the features such as ligand and receptor shapes, charges, and molecular forces. All of the factors can be accounted via FRED (Fast Rigid Exhaustive Docking) which calculates the Chemgauss4 (cg4) scoring function.
 
-Since the relative positions of the ligand and receptor affect the likelihood of binding, the fred scores for 500 frames for each ligand were taken to help determine whether that particular ligand will bind with the receptor. These 500 frames will be used as the features and will be the feature vector for the ligand instance.
+Since the relative positions of both the ligand and receptor affect the likelihood of binding, the FRED scores for 500 receptor frames crossed with each of 710 ligands were taken to create a system for predicting whether a particular ligand will bind with the receptor. These 500 frames were used as the features for feature vectors with the ligands as an instances.
 
-The labeled ligand instances and their 500-fred-score-long feature vectors will be used to train the $\epsilon$-sphere, nearest neighbors algorithm. The algorithm will then be employed on test instances to determine if the test ligand will bind to the given receptor.
+The labeled ligand instances and their 500-FRED-score-long feature vectors were used to train a basic $\epsilon$-sphere, nearest neighbors algorithm with low precision and recall results. The algorithm was then improved by selecting features with information gain and testing with different $\epsilon$ values.  However, the original dataset proved to be too small and limited to get conclusive results.  Synthetic data was then generated for testing and improving the nearest neighbors algorithm.  Then, the nearest neighbors algorithm was improved using a Lamba Means EM (Expectation Maximization) algorithm to cluster the data points with highly positive results.  
 \end{abstract}
 
 \section{Introduction}
