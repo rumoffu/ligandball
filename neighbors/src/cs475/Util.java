@@ -1,9 +1,9 @@
 /*
- * Kyle Wong
- * 14.3.6
+ * Kyle Wong, Tifany Yung
+ * 14.5.11
  * Machine Learning
- * kwong23
- * Assignment 3
+ * Final Project
+ * Nearest Neighbors
  */
 package cs475;
 
@@ -95,6 +95,14 @@ public class Util{
 	
 	public static Double[] vectorAdd(Double[] toadd, Double[] added){
 		Double[] sum = new Double[toadd.length];
+		for(int i = 0; i < toadd.length; i++){
+			sum[i] = toadd[i] + added[i];
+		}
+		return sum;
+	}
+	
+	public static double[] vectorAdd(double[] toadd, double[] added){
+		double[] sum = new double[toadd.length];
 		for(int i = 0; i < toadd.length; i++){
 			sum[i] = toadd[i] + added[i];
 		}

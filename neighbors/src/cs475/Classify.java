@@ -7,6 +7,7 @@
  */
 package cs475;
 
+import sphere.KMeansSpherePredictor;
 import sphere.SphereNearestNeighborPredictor;
 import java.io.BufferedInputStream;
 
@@ -47,6 +48,13 @@ public class Classify {
 		int num_features = UNINITIALIZED;
 		if (CommandLineUtilities.hasArg("num_features_to_select"))
 			num_features = CommandLineUtilities.getOptionValueAsInt("num_features_to_select");
+		double cluster_lambda = 0.0;
+		if (CommandLineUtilities.hasArg("cluster_lambda"))
+			cluster_lambda = CommandLineUtilities.getOptionValueAsFloat("cluster_lambda");
+		int clustering_training_iterations = 10;
+		if (CommandLineUtilities.hasArg("clustering_training_iterations"))
+			clustering_training_iterations = CommandLineUtilities.getOptionValueAsInt("clustering_training_iterations");
+
 		if (mode.equalsIgnoreCase("train")) {
 			if (data == null || algorithm == null || model_file == null) {
 				System.out.println("Train requires the following arguments: data, algorithm, model_file");
@@ -57,11 +65,13 @@ public class Classify {
 			List<Instance> instances = data_reader.readData();
 			data_reader.close();
 			final long dataTime = System.currentTimeMillis();
-			System.out.println("Total data time (ms): " + (dataTime - startTime) );
+//			System.out.println("Total data time (ms): " + (dataTime - startTime) );
 			
 			// Train the model.
-			Predictor predictor = train(instances, algorithm, eps, num_features);
+			Predictor predictor = train(instances, algorithm, eps, num_features, cluster_lambda, clustering_training_iterations);
 			saveObject(predictor, model_file);		
+
+			System.out.printf("Tested %s Accuracy\n", predictor);
 			
 		} else if (mode.equalsIgnoreCase("test")) {
 			if (data == null || predictions_file == null || model_file == null) {
@@ -85,7 +95,8 @@ public class Classify {
 	}
 	
 
-	private static Predictor train(List<Instance> instances, String algorithm, double eps, int num_features) {
+	private static Predictor train(List<Instance> instances, String algorithm, double eps, int num_features, 
+			double cluster_lambda, int clustering_training_iterations) {
 		// TODO Train the model using "algorithm" on "data"
 		// TODO Evaluate the model
 		//AccuracyEvaluator evaluator = new AccuracyEvaluator();
@@ -107,12 +118,21 @@ public class Classify {
 //			return (Predictor) predictor;
 			returnPredictor = (Predictor) predictor;
 		}
+		else if(algorithm.equalsIgnoreCase("kmeansball")){
+			KMeansSpherePredictor predictor = new KMeansSpherePredictor(eps, num_features, 
+					cluster_lambda, clustering_training_iterations);
+			predictor.train(instances);
+			//System.out.printf("Testing %s Accuracy\n", predictor);
+			//accuracy = evaluator.evaluateAccuracy(instances, predictor);
+//			return (Predictor) predictor;
+			returnPredictor = (Predictor) predictor;
+		}
 		else {
 			returnPredictor = null;
 		}
 		
 		final long trainTime = System.currentTimeMillis();
-		System.out.println("Total train time (ms): " + (trainTime - startTime) );
+//		System.out.println("Total train time (ms): " + (trainTime - startTime) );
 		
 		AccuracyEvaluator evaluator = new AccuracyEvaluator();
 		System.out.printf("Testing %s Accuracy\n", returnPredictor);
@@ -197,6 +217,8 @@ public class Classify {
 		registerOption("model_file", "String", true, "The name of the model file to create/load.");
 		registerOption("epsilon", "double", true, "The value of epsilon for epsilon nearest neighbors.");
 		registerOption("num_features_to_select", "int", true, "The number of features to select.");
+		registerOption("cluster_lambda", "double", true, "The value of lambda in lambda-means.");
+		registerOption("clustering_training_iterations", "int", true, "The number of clustering iterations.");
 		// Other options will be added here.
 	}
 }

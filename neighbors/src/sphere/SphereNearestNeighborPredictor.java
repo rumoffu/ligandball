@@ -1,9 +1,9 @@
 /*
- * Kyle Wong
+ * Kyle Wong, Tifany Yung
  * 14.5.11
  * Machine Learning
- * kwong23
  * Final Project
+ * Nearest Neighbors
  */
 package sphere;
 
@@ -34,6 +34,9 @@ public class SphereNearestNeighborPredictor extends Predictor{
 	private Double[] weights;
 	private int[] bestgains;
 	
+	private double distsum;
+	private int numpred;
+	
 	/**
 	 * @param args
 	 */
@@ -54,12 +57,15 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		this.eps = eps;
 
 		this.num_features_to_select = input_num_features;
+		this.distsum = 0;
+		this.numpred = 0;
 //		this.clustering_training_iterations = clustering_training_iterations;
 		
 	}
 	
 	public String toString() {
-		return "Basic Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps);
+		return "Basic Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps)
+				+ " average distance : " + String.valueOf(this.distsum / this.numpred);
 	}
 	
 	public void train(List<Instance> instances) {
@@ -100,6 +106,8 @@ public class SphereNearestNeighborPredictor extends Predictor{
 			xi = all;
 			dist = Util.euclideanDistance(xi, pts.get(k));
 //			System.out.println(dist);
+			this.distsum += dist;
+			this.numpred++;
 			if(dist < this.eps){ // within epsilon ball radius
 				ballcount++;
 				positivecount += labels[k]; // add the 1's, ignore 0's
@@ -201,138 +209,5 @@ public class SphereNearestNeighborPredictor extends Predictor{
 		Arrays.sort(bestgains); // to track weight with feature number ordering //KTW
 //		for(int j = 0; j < num_features_to_select; j++) System.out.println("bestid: "+bestgains[j]+" bestvalues: " + bestvalues[j]);
 	}
-	
-//	@Override
-//	public void train(List<Instance> instances) {
-//		// Initialize prototype vector to the mean of all instances
-//		this.number_of_features = Util.getMaxFeatureKey(instances);
-//		Double[] sum = new Double[this.number_of_features];
-//		for(int i = 0; i < this.number_of_features; i++){
-//			sum[i] = 0.0;
-//		}
-//		Double[] xi;
-//		
-//		for(Instance e : instances){
-//			xi = e.getFeatureVector().getAll(this.number_of_features);
-//			sum = Util.vectorAdd(sum, xi);
-//		}
-//		mewk.add(Util.scalarMultiply(1.0/instances.size(), sum));
-//		
-//		// Initialize rnk
-//		ArrayList<Integer> newCluster = new ArrayList<Integer>();
-//		rnk.add(newCluster);
-//		
-//		// Initialize Lambda Value
-////		if(this.cluster_lambda == 0.0){
-////			double lambdasum = 0.0;
-////			for(Instance e : instances){
-////				xi = e.getFeatureVector().getAll(this.number_of_features);
-////				lambdasum += Util.euclideanDistance(xi, mewk.get(0));
-////			}
-////			this.cluster_lambda = 1.0/instances.size() * lambdasum;
-////		}
-////		System.out.println("Cluster lambda: " + this.cluster_lambda);
-//		
-//		// Perform training iterations
-//		for(int i = 0; i < this.clustering_training_iterations; i++){
-//			Estep(instances);
-//			Mstep(instances);
-//		}
-//	}
-//
-//	private void Estep(List<Instance> instances){
-//		double minDist = Double.POSITIVE_INFINITY;
-//		double dist;
-//		Double[] xi;
-//		int minCluster = -1;
-//		// Reset old cluster assignments
-//		for(ArrayList<Integer> ra : rnk){
-//			ra.clear();
-//		}
-//		// For each instance, assign to cluster
-//		for(int j = 0; j < instances.size(); j++){
-//			xi = instances.get(j).getFeatureVector().getAll(this.number_of_features);
-//			minDist = Double.POSITIVE_INFINITY;
-//			// get the minimum distance cluster k that the instance belongs to 
-//			for(int k = 0; k < this.mewk.size(); k++){
-//				dist = Util.euclideanDistance(xi, mewk.get(k));
-//				if(dist < minDist){//defaults to break ties by assigning to lowest cluster number
-//					minDist = dist;
-//					minCluster = k;
-//				}
-//			}
-////			if(minDist <= this.cluster_lambda){
-////				// fits in a current cluster, so get the cluster's arraylist and add the instance id to it
-////				
-////				rnk.get(minCluster).add(j);
-////			}
-////			else{ //bigger than lambda so we make a new cluster and make a new mew_k
-////				ArrayList<Integer> newCluster = new ArrayList<Integer>();
-////				newCluster.add(j);
-////				rnk.add(newCluster);
-////				mewk.add(xi);
-////			}
-//		}
-//		
-//	}
-//	private void Mstep(List<Instance> instances){
-//		Double[] xi;
-//		Double[] sum = new Double[this.number_of_features];
-//		
-//		for(int k = 0; k < mewk.size(); k++){ // for each mew
-//			for(int i = 0; i < this.number_of_features; i++){
-//				sum[i] = 0.0;
-//			}
-//			ArrayList<Integer> cluster = rnk.get(k);
-//			for(int n : cluster){ //for each instance in mew
-//				xi = instances.get(n).getFeatureVector().getAll(this.number_of_features);
-//				sum = Util.vectorAdd(sum, xi);
-//			}
-//			if(cluster.size() == 0){ //if it is empty, set it to 0's
-//				sum = new Double[this.number_of_features];
-//				for(int i = 0; i < this.number_of_features; i++){
-//					sum[i] = 0.0;
-//				}
-//				mewk.set(k, sum);
-//			}
-//			else{//update to 1 over n times the sum of each instance in it
-//				mewk.set(k, Util.scalarMultiply(1.0/cluster.size(), sum));
-//			}
-//		}
-//		
-//		
-//	}
-//	@Override
-//	/**
-//	 * Predicts the cluster number that the instance belongs to.
-//	 * @return a label with number 0 to k-1 which is the cluster number
-//	 */
-//	public Label predict(Instance instance) {
-//		double minDist = Double.POSITIVE_INFINITY;
-//		double dist;
-//		Double[] xi = instance.getFeatureVector().getAll(this.number_of_features);
-//		int minCluster = -1;
-//		for(int k = 0; k < this.mewk.size(); k++){ //compare to each mewk
-//			dist = Util.euclideanDistance(xi, mewk.get(k));
-//			if(dist < minDist){ //defaults to break ties by assigning to lowest cluster number
-//				minDist = dist;
-//				minCluster = k;
-//			}
-//		}
-//		return new ClassificationLabel(minCluster);
-//	}
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
+

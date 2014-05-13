@@ -104,7 +104,6 @@ public class LambdaMeansPredictor extends Predictor{
 			}
 			if(minDist <= this.cluster_lambda){
 				// fits in a current cluster, so get the cluster's arraylist and add the instance id to it
-				
 				rnk.get(minCluster).add(j);
 			}
 			else{ //bigger than lambda so we make a new cluster and make a new mew_k
@@ -114,8 +113,8 @@ public class LambdaMeansPredictor extends Predictor{
 				mewk.add(xi);
 			}
 		}
-		
 	}
+	
 	private void Mstep(List<Instance> instances){
 		Double[] xi;
 		Double[] sum = new Double[this.number_of_features];
@@ -139,9 +138,7 @@ public class LambdaMeansPredictor extends Predictor{
 			else{//update to 1 over n times the sum of each instance in it
 				mewk.set(k, Util.scalarMultiply(1.0/cluster.size(), sum));
 			}
-		}
-		
-		
+		}	
 	}
 	@Override
 	/**
@@ -162,17 +159,4 @@ public class LambdaMeansPredictor extends Predictor{
 		}
 		return new ClassificationLabel(minCluster);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }

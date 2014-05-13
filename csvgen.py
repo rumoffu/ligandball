@@ -14,11 +14,11 @@ Example output: csid, result, fid, cg4; 500 frames for each
 import random
 
 def getFrames(csid, csv):
-  mu0 = -6.5
-  dev0 = 4
+  mu0 = -6
+  dev0 = 1
   numframes = 500
   mu1 = -8
-  dev1 = 6
+  dev1 = 1
 
   if csid < 51:
     res = 1;
@@ -35,7 +35,7 @@ def getFrames(csid, csv):
 #x= random.normalvariate(2,17)
 
 def main():
-  fredcsv = 'framedata.csv'
+  fredcsv = 'balldata.csv'
   numcsid = 700
   csv = open(fredcsv, 'w')
   for csid in range(1, numcsid+1):
