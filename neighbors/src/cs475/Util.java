@@ -101,6 +101,14 @@ public class Util{
 		return sum;
 	}
 	
+	public static double[] vectorAdd(double[] toadd, double[] added){
+		double[] sum = new double[toadd.length];
+		for(int i = 0; i < toadd.length; i++){
+			sum[i] = toadd[i] + added[i];
+		}
+		return sum;
+	}
+	
 	public static Double[] scalarMultiply(double scaler, Double[] ra){
 		Double[] product = new Double[ra.length];
 		for(int i = 0; i < product.length; i++){

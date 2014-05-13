@@ -36,7 +36,7 @@ public class KMeansSpherePredictor extends Predictor{
 	private double cluster_lambda;
 	private int clustering_training_iterations;
 	private ArrayList<ArrayList<Integer>> rnk = new ArrayList<ArrayList<Integer>>(); //track which instance's are in a cluster by id
-	private ArrayList<Double[]> mewk = new ArrayList<Double[]>(); //track the mew - centers of each cluster (x-dimensional)
+	private ArrayList<double[]> mewk = new ArrayList<double[]>(); //track the mew - centers of each cluster (x-dimensional)
 
 	
 	/**
@@ -77,25 +77,121 @@ public class KMeansSpherePredictor extends Predictor{
 	
 	public void train(List<Instance> instances) {
 
+		// set num features to select based on input and max feature key
 		selectFeatures(instances);
 		double[] xi = new double[this.num_features_to_select];
 
 //		System.out.println("num features: " + this.num_features_to_select);
 //		this.number_of_features = Util.getMaxFeatureKey(instances);
 		
+		//add all points with features organized by IG and save their labels
 		this.labels = new int[instances.size()];
-//		for(Instance e : instances){
-		for(int i = 0; i < instances.size(); i++) {
+		for(int i = 0; i < instances.size(); i++) { // for each instance
 //			xi = instances.get(i).getFeatureVector().getAlld(this.num_features_to_select);
 			double[] all = new double[this.num_features_to_select];
 			for (int j = 0; j < this.num_features_to_select; j++) {
 				all[j] = instances.get(i).getFeatureVector().get(this.bestgains[j]);
-//				all[j] = instances.get(i).getFeatureVector().get(j+1);
 			}
 			xi = all;
 			pts.add(xi);
 			this.labels[i] = Integer.parseInt(instances.get(i).getLabel().toString());
 		}
+		
+		// Calculate clusters for the points
+		
+		// Initialize prototype vector to the mean of all instances
+		this.num_features_to_select = Util.getMaxFeatureKey(instances);
+		double[] sum = new double[this.num_features_to_select];
+		for(int i = 0; i < this.num_features_to_select; i++){
+			sum[i] = 0.0;
+		}		
+		for(Instance e : instances){
+			xi = e.getFeatureVector().getAlld(this.num_features_to_select);
+			sum = Util.vectorAdd(sum, xi);
+		}
+		mewk.add(Util.scalarMultiply(1.0/instances.size(), sum));
+		
+		// Initialize rnk
+		ArrayList<Integer> newCluster = new ArrayList<Integer>();
+		rnk.add(newCluster);
+		
+		// Initialize Lambda Value to the average
+		if(this.cluster_lambda == 0.0){
+			double lambdasum = 0.0;
+			for(Instance e : instances){
+				xi = e.getFeatureVector().getAlld(this.num_features_to_select);
+				lambdasum += Util.euclideanDistance(xi, mewk.get(0));
+			}
+			this.cluster_lambda = 1.0/instances.size() * lambdasum;
+		}
+		System.out.println("Cluster lambda: " + this.cluster_lambda);
+		System.out.println("Num EM Iterations for clustering: " + this.clustering_training_iterations);
+		// Perform training iterations
+		for(int i = 0; i < this.clustering_training_iterations; i++){
+			Estep(instances);
+			Mstep(instances);
+		}
+		System.out.println("Number of mews: " + mewk.size());
+	}
+	
+	private void Estep(List<Instance> instances){
+		double minDist = Double.POSITIVE_INFINITY;
+		double dist;
+		double[] xi;
+		int minCluster = -1;
+		// Reset old cluster assignments
+		for(ArrayList<Integer> ra : rnk){
+			ra.clear();
+		}
+		// For each instance, assign to cluster
+		for(int j = 0; j < instances.size(); j++){
+			xi = instances.get(j).getFeatureVector().getAlld(this.num_features_to_select);
+			minDist = Double.POSITIVE_INFINITY;
+			// get the minimum distance cluster k that the instance belongs to 
+			for(int k = 0; k < this.mewk.size(); k++){
+				dist = Util.euclideanDistance(xi, mewk.get(k));
+				if(dist < minDist){//defaults to break ties by assigning to lowest cluster number
+					minDist = dist;
+					minCluster = k;
+				}
+			}
+			if(minDist <= this.cluster_lambda){
+				// fits in a current cluster, so get the cluster's arraylist and add the instance id to it
+				rnk.get(minCluster).add(j);
+			}
+			else{ //bigger than lambda so we make a new cluster and make a new mew_k
+				ArrayList<Integer> newCluster = new ArrayList<Integer>();
+				newCluster.add(j);
+				rnk.add(newCluster);
+				mewk.add(xi);
+			}
+		}
+	}
+	
+	private void Mstep(List<Instance> instances){
+		double[] xi;
+		double[] sum = new double[this.num_features_to_select];
+		
+		for(int k = 0; k < mewk.size(); k++){ // for each mew
+			for(int i = 0; i < this.num_features_to_select; i++){
+				sum[i] = 0.0;
+			}
+			ArrayList<Integer> cluster = rnk.get(k);
+			for(int n : cluster){ //for each instance in mew
+				xi = instances.get(n).getFeatureVector().getAlld(this.num_features_to_select);
+				sum = Util.vectorAdd(sum, xi);
+			}
+			if(cluster.size() == 0){ //if it is empty, set it to 0's
+				sum = new double[this.num_features_to_select];
+				for(int i = 0; i < this.num_features_to_select; i++){
+					sum[i] = 0.0;
+				}
+				mewk.set(k, sum);
+			}
+			else{//update to 1 over n times the sum of each instance in it
+				mewk.set(k, Util.scalarMultiply(1.0/cluster.size(), sum));
+			}
+		}	
 	}
 	
 	public Label predict(Instance instance) {
