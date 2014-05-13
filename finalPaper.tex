@@ -105,7 +105,11 @@ The accuracy, precision, recall, and run time in milliseconds for the $\epsilon$
 - what do these results mean
 
 \section{Future Work}
+Future work would be to test the basic $\epsilon$-sphere, nearest neighbors algorithm on a larger ligand-receptor dataset to see if having more positive binding ligands provides enough information to predict with better precision and recall.  Also, the larger dataset could be tested on the K-means $\epsilon$-sphere, nearest neighbors algorithm to verify how much speedup is achieved.
 
+One of the hard parts of this $\epsilon$-sphere, nearest neighbors algorithm was trying to find an optimal value for $\epsilon$, the cut off distance for finding nearby points to consider for predicting labels.  It is a tricky problem because the value of $\epsilon$ depends on the features themselves.  In our project, we found that changing the number of features used could greatly change the average Euclidean distance between points, and thus the value for $\epsilon$ also had to change.  Finding a more robust and automated method to choose $\epsilon$ would make the algorithm itself more useful in practice.
+
+Future work for this data could also involve trying to do feature extraction and dimensionality reduction using Principal Component Analysis.  This could improve the accuracy of the algorithm while also speeding up the runtime for predicting due to the dimensionality reduction.  
 
 \section{Comparison}
 
@@ -114,10 +118,6 @@ The original project proposal suggested three milestones for the optimization of
 The expected deliverable was to implement a faster $\epsilon$-sphere algorithm by using divide-and-conquer in lieu of a linear search for the $epsilon$ closest points to a test point, similar to a kd tree. However, this was not implemented because it was found via additional research (Indyk and Rajeev) that usage of kd trees in higher dimensions are no better than brute-force search since most nodes in the kd tree would need to be evaluated anyways. Therefore, this deliverable was not implemented.
 
 The "Would like to achieve" deliverable was to implement a K-means approach of clustering the training data points by euclidean distance in order to speed-up the time of searching for nearest neighbors.  We finished this deliverable and implemented it in the class KMeansSpherePredictor.java in the "sphere" package of the "neighbors" project. The results and analysis of the runtime improvement and accuracy of this implementation is provided above in the Results section.
-
-
-\section{Junk}
-
 
 \begin{thebibliography}{}
 \bibitem[\protect\citename{Cavasotto, Claudio N., Julio A. Kovacs, and Ruben A. Abagyan.}2005] {Cavasotto, Claudio N., Julio A. Kovacs, and Ruben A. Abagyan.: 05} Cavasotto, Claudio N., Julio A. Kovacs, and Ruben A. Abagyan.
