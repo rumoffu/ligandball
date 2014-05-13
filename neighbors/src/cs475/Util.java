@@ -1,9 +1,9 @@
 /*
- * Kyle Wong
- * 14.3.6
+ * Kyle Wong, Tifany Yung
+ * 14.5.11
  * Machine Learning
- * kwong23
- * Assignment 3
+ * Final Project
+ * Nearest Neighbors
  */
 package cs475;
 

@@ -1,9 +1,9 @@
 /*
- * Kyle Wong
+ * Kyle Wong, Tifany Yung
  * 14.5.11
  * Machine Learning
- * kwong23
  * Final Project
+ * Nearest Neighbors
  */
 package sphere;
 

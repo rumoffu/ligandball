@@ -1,9 +1,9 @@
 /*
- * Kyle Wong
+ * Kyle Wong, Tifany Yung
  * 14.5.11
  * Machine Learning
- * kwong23
  * Final Project
+ * Nearest Neighbors
  */
 package sphere;
 
@@ -18,7 +18,7 @@ import cs475.Predictor;
 import cs475.Util;
 
 @SuppressWarnings("serial")
-public class SphereNearestNeighborPredictor extends Predictor{
+public class KMeansSpherePredictor extends Predictor{
 	private double eps; // default epsilon value
 	
 //	private int number_of_features;
@@ -59,7 +59,7 @@ public class SphereNearestNeighborPredictor extends Predictor{
 
 	}
 
-	public SphereNearestNeighborPredictor(double eps, int input_num_features) {
+	public KMeansSpherePredictor(double eps, int input_num_features) {
 		this.eps = eps;
 
 		this.num_features_to_select = input_num_features;
