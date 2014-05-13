@@ -35,21 +35,38 @@ The labeled ligand instances and their 500-FRED-score-long feature vectors were 
 
 \section{Introduction}
 
-The $\epsilon$-sphere nearest neighbors algorithm is a close relative of the K-nearest neighbors algorithm; both are clustering algorithms designed with the purpose of categorizing data into a certain number of categories, or labels. As an example, for the ligand-receptor data used, the ligands would be labeled with whether or not they could potentially bind with a given receptor.
+The $\epsilon$-sphere nearest neighbors algorithm is a close relative of the K-nearest neighbors algorithm; both are clustering algorithms designed with the purpose of categorizing data into a certain number of categories, or labels. As an example, for the ligand-receptor data used, the ligands would be labeled with whether or not they bind with the given receptor.
 
-Clustering algorithms work by using nearby points to determine which cluster or label a given point should be placed in based on the labels of the points around it. The only difference between above-mentioned $\epsilon$-sphere and K nearest neighbors is the number of points around the test point that is used to help determine the test point's label. In the K nearest neighbors algorithm, the K points closest to the test point are taken, and the test point is assigned the majority label amongst those points; in the $\epsilon$-sphere algorithm, all points that are within a Euclidean distance of $\epsilon$ from the test point are used.
+Clustering algorithms work by using nearby points to determine which cluster or label a given point should be placed in based on the labels of the points around it. The only difference between the above-mentioned $\epsilon$-sphere and K nearest neighbors is how to choose the points around the test point to help determine the test point's label. In the K nearest neighbors algorithm, the number K of points closest to the test point are taken, and the test point is assigned the majority label amongst those points; in the $\epsilon$-sphere algorithm, all points that are within a Euclidean distance of $\epsilon$ or less from the test point are used and the majority label is used as the prediction.
 
-The general structure of the $\epsilon$-sphere clustering algorithm is the same as any machine learning algorithm: teaching the algorithm using a training dataset, and test the accuracy of the algorithm with a development dataset. During training, the training data points are simply read in and stored. Since the training data is already labeled, the training data points are already separated into clusters.
+The general structure of the $\epsilon$-sphere clustering algorithm is the same as any machine learning algorithm: teaching the algorithm using a training dataset, and testing the accuracy of the algorithm with a development dataset. During training of $\epsilon$-sphere clustering, the training data points are simply read in and stored. 
 
-During testing, unlabeled data points are inputted individually, and the algorithm attempts to place them in a cluster. It does so by taking all data points within $\epsilon$ of the test point and calculating the majority label amongst those points. The test point is then assigned to that majority label and added to the cluster, so the test point will influence the labels of future test points. Testing continues as more test points are labeled and added to the clusters.
+During testing, data points are input individually, and the algorithm attempts to predict their label. It does so by taking all data points within Euclidean distance $\epsilon$ of the test point and calculating the majority label amongst those points. The test point is then assigned to that majority label.
 
 There has been some previous research into speeding up K nearest neighbors by using $\epsilon$-sphere. Indyk and Rajeev (1998) first implemented and tested a kd-tree for the $\epsilon$-sphere algorithm and recommended it only for low-dimensional data. More recently, Muja and Lowe attempted to find fast approximates for the nearest neighbors algorithm.
 
+For receptor ligand docking, 
 
 
+\section{Methods}
 
-\section{General Instructions}
+Which ML techniques we picked and why they are suited for our data
 
+\section{Results}
+- output
+
+- what tests did we run
+
+- what do these results mean
+
+\section{Comparison}
+
+- milestones reached or not reached
+
+- changes from the original plan
+
+
+\section{Junk}
 Manuscripts must be in two-column format.  Exceptions to the
 two-column format include the title, authors' names and complete
 addresses, which must be centered at the top of the first page (see
