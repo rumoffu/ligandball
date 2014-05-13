@@ -83,6 +83,57 @@ Recall: 40/40 (100.00%)
 Tested K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 25.0 average distance : 31.478136034861638 Accuracy
 Total execution time (ms): 18973
 
+Cluster lambda: 7.68699626243977
+Num EM Iterations for clustering: 10
+Number of mews: 149
+Testing K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 35.0 average distance : NaN Accuracy
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 35.0 average distance : 9.933489689215703 Accuracy
+Total execution time (ms): 1949
+
+Cluster lambda: 7.68699626243977
+Num EM Iterations for clustering: 10
+Number of mews: 149
+Testing K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 10.0 average distance : NaN Accuracy
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 10.0 average distance : 9.933489689215703 Accuracy
+Total execution time (ms): 1981
+
+Cluster lambda: 7.68699626243977
+Num EM Iterations for clustering: 10
+Number of mews: 149
+Testing K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 5.0 average distance : NaN Accuracy
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 5.0 average distance : 9.933489689215703 Accuracy
+Total execution time (ms): 2003
+
+Cluster lambda: 7.68699626243977
+Num EM Iterations for clustering: 10
+Number of mews: 149
+Testing K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 25.0 average distance : NaN Accuracy
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 25.0 average distance : 9.933489689215703 Accuracy
+Total execution time (ms): 1963
+
+Cluster lambda: 17.180123325061587
+Num EM Iterations for clustering: 10
+Number of mews: 57
+Testing K Means Nearest Neighbor with IG numfeatures: 250 with epsilon 25.0 average distance : NaN Accuracy
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested K Means Nearest Neighbor with IG numfeatures: 250 with epsilon 25.0 average distance : 22.18518020695555 Accuracy
+Total execution time (ms): 9153
+
+
 
 
 KMeans Dev
@@ -104,6 +155,38 @@ Number correct: 130/140 (92.86%)
 Precision: 0/0 (NaN%)
 Recall: 0/10 (0.00%)
 Total execution time (ms): 4245
+
+Testing K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 35.0 average distance : 9.933489689215703 Accuracy
+Number correct: 140/140 (100.00%)
+Precision: 10/10 (100.00%)
+Recall: 10/10 (100.00%)
+Total execution time (ms): 630
+
+Testing K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 25.0 average distance : 9.933489689215703 Accuracy
+Number correct: 140/140 (100.00%)
+Precision: 10/10 (100.00%)
+Recall: 10/10 (100.00%)
+Total execution time (ms): 627
+
+Testing K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 10.0 average distance : 9.933489689215703 Accuracy
+Number correct: 132/140 (94.29%)
+Precision: 2/2 (100.00%)
+Recall: 2/10 (20.00%)
+Total execution time (ms): 636
+
+Testing K Means Nearest Neighbor with IG numfeatures: 50 with epsilon 5.0 average distance : 9.933489689215703 Accuracy
+Number correct: 130/140 (92.86%)
+Precision: 0/0 (NaN%)
+Recall: 0/10 (0.00%)
+Total execution time (ms): 629
+
+Testing K Means Nearest Neighbor with IG numfeatures: 250 with epsilon 25.0 average distance : 22.18518020695555 Accuracy
+Number correct: 140/140 (100.00%)
+Precision: 10/10 (100.00%)
+Recall: 10/10 (100.00%)
+Total execution time (ms): 1901
+
+
 
 Positive factor:
 
