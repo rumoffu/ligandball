@@ -47,6 +47,13 @@ public class Classify {
 		int num_features = UNINITIALIZED;
 		if (CommandLineUtilities.hasArg("num_features_to_select"))
 			num_features = CommandLineUtilities.getOptionValueAsInt("num_features_to_select");
+		double cluster_lambda = 0.0;
+		if (CommandLineUtilities.hasArg("cluster_lambda"))
+			cluster_lambda = CommandLineUtilities.getOptionValueAsFloat("cluster_lambda");
+		int clustering_training_iterations = 10;
+		if (CommandLineUtilities.hasArg("clustering_training_iterations"))
+			clustering_training_iterations = CommandLineUtilities.getOptionValueAsInt("clustering_training_iterations");
+
 		if (mode.equalsIgnoreCase("train")) {
 			if (data == null || algorithm == null || model_file == null) {
 				System.out.println("Train requires the following arguments: data, algorithm, model_file");
@@ -199,6 +206,8 @@ public class Classify {
 		registerOption("model_file", "String", true, "The name of the model file to create/load.");
 		registerOption("epsilon", "double", true, "The value of epsilon for epsilon nearest neighbors.");
 		registerOption("num_features_to_select", "int", true, "The number of features to select.");
+		registerOption("cluster_lambda", "double", true, "The value of lambda in lambda-means.");
+		registerOption("clustering_training_iterations", "int", true, "The number of clustering iterations.");
 		// Other options will be added here.
 	}
 }
