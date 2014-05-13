@@ -70,14 +70,14 @@ Thus, we instead implemented a K-Means approach where we would use EM (Expectati
 
 \section{Problems Encountered - Data}
 \subsection{Ligand Data Problems}
-One major setback was the loss of data from the Data Management Systems lab (DAMSL) due to the crash of two RAID Array Controllers.  Thus, this projected was limited in its data to only 10 positive binding ligand instances and only 690 negative non-binding ligand instances.  This proved difficult for splitting the data into dev and train data.  We decided to do a 80\% train 20\% development data split, but that still only have us 8 positive training ligand examples and only 2 positive development testing ligand examples.  Furthermore, due to the DAMSL data loss, we were unable to get more data for testing.  
+One major setback was the loss of data from the Data Management Systems Lab (DAMSL) due to the crash of two RAID Array Controllers.  Thus, this project was limited in its data to only 10 positive binding ligand instances and only 690 negative non-binding ligand instances.  This proved difficult for splitting the data into dev and train data.  We decided to do a 80\% train 20\% development data split, but that still only gave us 8 positive training ligand examples and only 2 positive development testing ligand examples.  Furthermore, due to the DAMSL data loss, we were unable to get more data for testing.  
 
 As for the data itself, it was difficult to find a good optimization.  This seems to be a result of the FRED cg4 scores themselves as the data is not highly indicative of being able to distinguish between positive binding ligands and negative non-binding ligands.  In particular, when we performed statistics on the data, we found that the average FRED score for positive binding ligands and negative non-binding ligands was about the same at a value of around -6.5 and even their standard deviation was about the same of about 1.35
 
 \subsection{Synthetically Generated Data - Ball}
 In order to create a more helpful dataset, we generated a dataset called "ball" under the idea that positive binding ligands would have an average binding score of -8 with standard deviation of 1 and that negative non-binding ligands would have an average binding score of -6 with standard deviation of 1.  This synthetic dataset would thus allow us to test our algorithm knowing that the classification would be possible while still having points that overlapped between these two ball regions.
 
-Further, we created this dataset with 50 positive binding ligand instances and with 650 negative non-binding ligands.  This would help us to have a larger number of positive training and development testing examples for evaluating our $\epsilon$-sphere, nearest neighbors algorithm.  We still opted to do a 80\% train 20\% development data split.
+Furthermore, we created this dataset with 50 positive binding ligand instances and with 650 negative non-binding ligands.  This would help us to have a larger number of positive training and development testing examples for evaluating our $\epsilon$-sphere, nearest neighbors algorithm.  We still opted to do a 80\% train 20\% development data split.
 
 We wrote three python scripts to do this: 
 
