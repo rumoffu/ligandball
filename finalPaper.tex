@@ -34,6 +34,7 @@ The labeled ligand instances and their 500-FRED-score-long feature vectors were 
 \end{abstract}
 
 \section{Introduction}
+\subsection{Nearest Neighbor Algorithm}
 
 The $\epsilon$-sphere nearest neighbors algorithm is a close relative of the K-nearest neighbors algorithm; both are clustering algorithms designed with the purpose of categorizing data into a certain number of categories, or labels. As an example, for the ligand-receptor data used, the ligands would be labeled with whether or not they bind with the given receptor.
 
@@ -45,12 +46,23 @@ During testing, data points are input individually, and the algorithm attempts t
 
 There has been some previous research into speeding up K nearest neighbors by using $\epsilon$-sphere. Indyk and Rajeev (1998) first implemented and tested a kd-tree for the $\epsilon$-sphere algorithm and recommended it only for low-dimensional data. More recently, Muja and Lowe attempted to find fast approximates for the nearest neighbors algorithm.
 
-For receptor ligand docking, 
+\subsection{Virtual Screening}
+For receptor ligand docking, much of the work is done manually by hand where researchers do virtual screening for a given receptor by hand-picking ligands that they believe will likely bind to the receptor.  This process is known to be very slow and labor-intensive.  As such, automated virtual screening is of utmost importance.  However, simply screening a receptor model with a ligand in a docking program such as FRED often results in incorrect estimates of binding affinity.  The assumption is that ligands that bind to a receptor will fit nicely with the receptor and will thus be detected by having a more negative binding score when screened with docking.  However, oftentimes, ligands that do not bind to a receptor sometimes give a more negative binding score for a given receptor pose. Thus, using multiple receptor poses may improve docking calculations (Totrov et. al. 2008).
 
+However, receptor model poses are frequently incomplete as the conformational space of protein shape and flexibility is so large.  This leads to a wide fluctuation in binding affinity score predictions.  One approach for addressing this issue is identifying the relevant receptor modes to identify the correct ensemble of receptor conformations in order to do more accurate virtual screening (Cavasotto 2005).  This leads to the idea of applying the concept of measuring Information Gain on the receptor frame (pose) features in order to select the frames which are truly relevant.
+
+\section{Data}
+The data used for this project includes Ligand/receptor binding data obtained from the Data Management Systems lab. The data consists of 710 labeled ligands that were screened with FRED across 500 frames of a receptor to get Chemgauss4 (cg4) scores. Each receptor frame represents the pose of a receptor at a different time.  10 of the ligands were known to actively bind with the receptor while the other 700 ligands were known to not have binding activity with the receptor.
 
 \section{Methods}
+\subsection{Algorithm Selection}
+For this project, we assumed that the different frames of the receptor would capture different characteristics of ligands required for the ligand to bind to the receptor.  Therefore, since we had 500 frame data points for each ligand, we chose to do the $\epsilon$-sphere nearest neighbors algorithm under the idea that if two ligands had similar binding scores for the same frames, they would be functionally similar.  Thus, they would have a low Euclidean distance in terms of the frame FRED cg4 scores.
 
-Which ML techniques we picked and why they are suited for our data
+There are a variety of characteristics that can help a ligand to bind to a receptor including: electrostatics forces, solvation and desolvation effects, hydrophobic interactions, bond stretching, dihedral energy terms, hydrogen bonds, and many other factors.  Therefore, our idea was that ligands that bound to the receptor would score similarly to other binding ligands.  And in the same way, non-binding ligands would score similarly to non-binding ligands.  So using the $\epsilon$-sphere nearest neighbors algorithm would help us to identify regions in the frame-ligand score space that corresponded to binding ligands.
+
+\subsection{Algorithm Optimization}
+Since some of the receptor frames (the features) may not provide useful and accurate information about ligand binding potential, we decided to try to use a measure of Information Gain to select the best frames for distinguishing whether a ligand would bind or not.  Since we had many frames, there was thus a high dimensionality, so reducing the number of features using Information Gain would also help overcome the "Curse of Dimensionality."  
+
 
 \section{Results}
 - output
@@ -297,10 +309,19 @@ subject to be rejected without review.
 
 
 \begin{thebibliography}{}
+\bibitem[\protect\citename{Cavasotto, Claudio N., Julio A. Kovacs, and Ruben A. Abagyan.}2005] {Cavasotto, Claudio N., Julio A. Kovacs, and Ruben A. Abagyan.: 05} Cavasotto, Claudio N., Julio A. Kovacs, and Ruben A. Abagyan.
+\newblock Representing receptor flexibility in ligand docking through relevant normal modes.
+\newblock {\em Journal of the American Chemical Society}, 127.26 (2005): 9632-9640.
+
 \bibitem[\protect\citename{Cover, Thomas, and Peter Hart.}1967]{Cover, Thomas, and Peter Hart: 67} Cover, Thomas, and Peter Hart.
 \newblock 1967.
 \newblock Nearest neighbor pattern classification.
 \newblock {\em Information Theory, IEEE Transactions}, 13(1):21-27.
+
+\bibitem[\protect\citename{Fukunaga, Keinosuke, and Patrenahalli M. Narendra.}1975] {Fukunaga, Keinosuke, and Patrenahalli M. Narendra: 75} Fukunaga, Keinosuke, and Patrenahalli M. Narendra.
+\newblock 1975.
+\newblock A branch and bound algorithm for computing k-nearest neighbors.
+\newblock {\em Computers, IEEE Transactions}, 100(7): 750-753.
 
 \bibitem[\protect\citename{Indyk, Piotr, and Rajeev Motwani.}1998] {Indyk, Piotr, and Rajeev Motwani: 98} Indyk, Piotr, and Rajeev Motwani.
 \newblock 1998.
@@ -308,14 +329,14 @@ subject to be rejected without review.
 \newblock {\em Proceedings of the thirtieth annual ACM symposium on Theory of computing.}
 
 \bibitem[\protect\citename{Muja, Marius, and David G. Lowe.}2009] {Muja, Marius, and David G. Lowe: 09} Muja, Marius, and David G. Lowe.
-\newblock 2009.
 \newblock Fast Approximate Nearest Neighbors with Automatic Algorithm Configuration.
 \newblock {\em VISAPP}, 2009.
 
-\bibitem[\protect\citename{Fukunaga, Keinosuke, and Patrenahalli M. Narendra.}1975] {Fukunaga, Keinosuke, and Patrenahalli M. Narendra: 75} Fukunaga, Keinosuke, and Patrenahalli M. Narendra.
-\newblock 1975.
-\newblock A branch and bound algorithm for computing k-nearest neighbors.
-\newblock {\em Computers, IEEE Transactions}, 100(7): 750-753.
+\bibitem[\protect\citename{Totrov, Maxim, and Ruben Abagyan.}2008] {Totrov, Maxim, and Ruben Abagyan.: 08} Totrov, Maxim, and Ruben Abagyan.
+\newblock Flexible ligand docking to multiple receptor conformations: a practical alternative.
+\newblock {\em Current opinion in structural biology}, 18.2 (2008): 178-184.
+
+
 \end{thebibliography}
 
 \end{document}
