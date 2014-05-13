@@ -36,8 +36,18 @@ BallLigTest
 FrameBallTrain
 -mode train -algorithm ball -model_file models/frame.ball.model -data data/frame.train
 
+CBallTrain
+-mode train -algorithm ball -model_file models/ball.model -data data/ball.train -epsilon 35
 
-Ball
+CBallTest
+-mode test -model_file models/ball.model -data data/ball.dev -predictions_file models/dev.ball.predictions
+
+KmeansTrain
+-mode train -algorithm kmeansball -model_file models/kmeans.ball.model -data data/ball.train -epsilon 35
+
+KmeansTest
+-mode test -model_file models/kmeans.ball.model -data data/ball.dev -predictions_file models/kmeans.dev.ball.predictions
+
 
 ==============================================
 
@@ -53,9 +63,47 @@ Recall: 40/40 (100.00%)
 Tested K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 35.0 average distance : 31.478136034861638 Accuracy
 Total execution time (ms): 18799
 
+Cluster lambda: 24.28859812275311
+Num EM Iterations for clustering: 10
+Number of mews: 44
+Testing K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 30.0 average distance : NaN Accuracy
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 30.0 average distance : 31.478136034861638 Accuracy
+Total execution time (ms): 18763
+
+Cluster lambda: 24.28859812275311
+Num EM Iterations for clustering: 10
+Number of mews: 44
+Testing K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 25.0 average distance : NaN Accuracy
+Number correct: 560/560 (100.00%)
+Precision: 40/40 (100.00%)
+Recall: 40/40 (100.00%)
+Tested K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 25.0 average distance : 31.478136034861638 Accuracy
+Total execution time (ms): 18973
+
+
+
 KMeans Dev
 ----------------
+Testing K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 35.0 average distance : 31.478136034861638 Accuracy
+Number correct: 140/140 (100.00%)
+Precision: 10/10 (100.00%)
+Recall: 10/10 (100.00%)
+Total execution time (ms): 4291
 
+Testing K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 30.0 average distance : 31.478136034861638 Accuracy
+Number correct: 135/140 (96.43%)
+Precision: 5/5 (100.00%)
+Recall: 5/10 (50.00%)
+Total execution time (ms): 4389
+
+Testing K Means Nearest Neighbor with IG numfeatures: 500 with epsilon 25.0 average distance : 31.478136034861638 Accuracy
+Number correct: 130/140 (92.86%)
+Precision: 0/0 (NaN%)
+Recall: 0/10 (0.00%)
+Total execution time (ms): 4245
 
 Positive factor:
 
