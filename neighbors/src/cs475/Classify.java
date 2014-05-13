@@ -7,6 +7,7 @@
  */
 package cs475;
 
+import sphere.KMeansSpherePredictor;
 import sphere.SphereNearestNeighborPredictor;
 import java.io.BufferedInputStream;
 
@@ -67,7 +68,7 @@ public class Classify {
 //			System.out.println("Total data time (ms): " + (dataTime - startTime) );
 			
 			// Train the model.
-			Predictor predictor = train(instances, algorithm, eps, num_features);
+			Predictor predictor = train(instances, algorithm, eps, num_features, cluster_lambda, clustering_training_iterations);
 			saveObject(predictor, model_file);		
 
 			System.out.printf("Tested %s Accuracy\n", predictor);
@@ -94,7 +95,8 @@ public class Classify {
 	}
 	
 
-	private static Predictor train(List<Instance> instances, String algorithm, double eps, int num_features) {
+	private static Predictor train(List<Instance> instances, String algorithm, double eps, int num_features, 
+			double cluster_lambda, int clustering_training_iterations) {
 		// TODO Train the model using "algorithm" on "data"
 		// TODO Evaluate the model
 		//AccuracyEvaluator evaluator = new AccuracyEvaluator();
@@ -110,6 +112,15 @@ public class Classify {
 		}
 		else if(algorithm.equalsIgnoreCase("ball")){
 			SphereNearestNeighborPredictor predictor = new SphereNearestNeighborPredictor(eps, num_features);
+			predictor.train(instances);
+			//System.out.printf("Testing %s Accuracy\n", predictor);
+			//accuracy = evaluator.evaluateAccuracy(instances, predictor);
+//			return (Predictor) predictor;
+			returnPredictor = (Predictor) predictor;
+		}
+		else if(algorithm.equalsIgnoreCase("kmeansball")){
+			KMeansSpherePredictor predictor = new KMeansSpherePredictor(eps, num_features, 
+					cluster_lambda, clustering_training_iterations);
 			predictor.train(instances);
 			//System.out.printf("Testing %s Accuracy\n", predictor);
 			//accuracy = evaluator.evaluateAccuracy(instances, predictor);

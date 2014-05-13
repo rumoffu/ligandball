@@ -21,10 +21,6 @@ import cs475.Util;
 public class KMeansSpherePredictor extends Predictor{
 	private double eps; // default epsilon value
 	
-//	private int number_of_features;
-//	private int num_clusters = 1;
-//	private int clustering_training_iterations;
-//	private ArrayList<ArrayList<Integer>> rnk = new ArrayList<ArrayList<Integer>>(); //track which instance's are in a cluster by id
 	private ArrayList<double[]> pts = new ArrayList<double[]>(); //track training pts
 	private int[] labels; // track training point labels
 	
@@ -59,7 +55,7 @@ public class KMeansSpherePredictor extends Predictor{
 
 	}
 
-	public KMeansSpherePredictor(double eps, int input_num_features) {
+	public KMeansSpherePredictor(double eps, int input_num_features, double cluster_lambda, int clustering_training_iterations) {
 		this.eps = eps;
 
 		this.num_features_to_select = input_num_features;
@@ -72,8 +68,11 @@ public class KMeansSpherePredictor extends Predictor{
 	}
 	
 	public String toString() {
-		return "Basic Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps)
+		return "K Means Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps)
 				+ " average distance : " + String.valueOf(this.distsum / this.numpred);
+//		return "K Means Nearest Neighbor with IG numfeatures: " + String.valueOf(num_features_to_select) + " with epsilon " + String.valueOf(this.eps)
+//				+ " average distance : " + String.valueOf(this.distsum / this.numpred);
+	
 	}
 	
 	public void train(List<Instance> instances) {
